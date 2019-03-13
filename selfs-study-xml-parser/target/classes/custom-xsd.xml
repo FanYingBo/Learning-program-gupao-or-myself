@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:custom="http://com.study.xml/xsd/custom"
+       xsi:schemaLocation="
+       http://com.study.xml/xsd/custom
+       http://com.study.xml/xsd/custom.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--
+    <custom:genPath tableName="testDemo" entityPath="hello" mapperPath="hello"/>
+-->
+
+    <bean id="genConfig" class="com.study.self.xml.GenConfig">
+        <property name="tableName" value="testDemo"/>
+        <property name="mapperPath" value="ddsaw"/>
+        <property name="entityPath" value="saasd"/>
+    </bean>
+</beans>

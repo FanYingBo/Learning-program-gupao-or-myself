@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.study.gupao.designmode.observer.core.EventLisenter</OriginalElement>
+  <nodes>
+    <node x="572.0" y="-98.0">com.study.gupao.designmode.observer.enumeration.MouseEventType</node>
+    <node x="310.0" y="80.0">com.study.gupao.designmode.observer.mouse.MouseEventCallBack</node>
+    <node x="129.0" y="272.0">com.study.gupao.designmode.observer.mouse.Mouse</node>
+    <node x="-212.0" y="299.0">com.study.gupao.designmode.observer.subject.Subject</node>
+    <node x="-89.0" y="75.0">com.study.gupao.designmode.observer.core.EventLisenter</node>
+    <node x="-402.0" y="85.0">com.study.gupao.designmode.observer.subject.Observer</node>
+    <node x="-639.0" y="184.0">com.study.gupao.designmode.observer.enumeration.EventType</node>
+    <node x="-61.0" y="-166.0">com.study.gupao.designmode.observer.core.Event</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.study.gupao.designmode.observer.mouse.Mouse" target="com.study.gupao.designmode.observer.core.EventLisenter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.study.gupao.designmode.observer.subject.Subject" target="com.study.gupao.designmode.observer.core.EventLisenter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="81.0" y="118.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

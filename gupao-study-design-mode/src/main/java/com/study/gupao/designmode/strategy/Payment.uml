@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.study.gupao.designmode.strategy.payport.Payment</OriginalElement>
+  <nodes>
+    <node x="0.0" y="350.0">com.study.gupao.designmode.strategy.payport.pattern.JDPay</node>
+    <node x="367.1393518518518" y="0.0">com.study.gupao.designmode.strategy.payport.PayState</node>
+    <node x="468.5" y="238.0">com.study.gupao.designmode.strategy.payport.Payment</node>
+    <node x="642.4726851851851" y="350.0">com.study.gupao.designmode.strategy.payport.pattern.AliPay</node>
+    <node x="312.0" y="350.0">com.study.gupao.designmode.strategy.payport.pattern.WeChatPay</node>
+    <node x="627.5" y="706.0">com.study.gupao.designmode.strategy.order.Order</node>
+    <node x="509.4726851851852" y="462.0">com.study.gupao.designmode.strategy.enumeration.PayType</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.study.gupao.designmode.strategy.payport.pattern.WeChatPay" target="com.study.gupao.designmode.strategy.payport.Payment">
+      <point x="97.33333333333337" y="-31.0" />
+      <point x="-58.39999999999998" y="31.0" />
+    </edge>
+    <edge source="com.study.gupao.designmode.strategy.payport.pattern.JDPay" target="com.study.gupao.designmode.strategy.payport.Payment">
+      <point x="97.33333333333331" y="-31.0" />
+      <point x="243.33333333333331" y="330.0" />
+      <point x="497.7" y="330.0" />
+      <point x="-116.80000000000001" y="31.0" />
+    </edge>
+    <edge source="com.study.gupao.designmode.strategy.payport.pattern.AliPay" target="com.study.gupao.designmode.strategy.payport.Payment">
+      <point x="-97.33333333333326" y="-31.0" />
+      <point x="691.1393518518519" y="330.0" />
+      <point x="731.3" y="330.0" />
+      <point x="116.79999999999995" y="31.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="595.0" y="332.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

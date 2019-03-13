@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://com.study.xml/xsd/custom"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://com.study.xml/xsd/custom">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="genPath" >
+        <xsd:complexType>
+            <xsd:attribute name="tableName" type="xsd:string" use="required"/>
+            <xsd:attribute name="entityPath" type="xsd:string" default="ClassPath:*"></xsd:attribute>
+            <xsd:attribute name="mapperPath" type="xsd:string" default="ClassPath:*"></xsd:attribute>
+        </xsd:complexType>
+
+    </xsd:element>
+
+
+</xsd:schema>

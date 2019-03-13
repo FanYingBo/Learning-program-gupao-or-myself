@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gupao-study-activemq" />
+        <module name="gupao-study-design-mode" />
+        <module name="gupao-study-dubbo" />
+        <module name="gupao-study-elasticsearch" />
+        <module name="gupao-study-jdk" />
+        <module name="gupao-study-kafka" />
+        <module name="gupao-study-mongodb" />
+        <module name="gupao-study-mybatis" />
+        <module name="gupao-study-mycat" />
+        <module name="gupao-study-netty" />
+        <module name="gupao-study-rabbitmq" />
+        <module name="gupao-study-sharding-sphere" />
+        <module name="gupao-study-springboot" />
+        <module name="gupao-study-springcloud" />
+        <module name="gupao-study-springframework" />
+        <module name="gupao-study-zookeeper" />
+        <module name="gupaostudyactivemq" />
+        <module name="self-study-networkprogram" />
+        <module name="selfs-study-xml-parser" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.8">
+      <module name="gupao-study-activemq" target="1.8" />
+      <module name="gupao-study-design-mode" target="1.8" />
+      <module name="gupao-study-dubbo" target="1.8" />
+      <module name="gupao-study-elasticsearch" target="1.8" />
+      <module name="gupao-study-jdk" target="1.8" />
+      <module name="gupao-study-kafka" target="1.8" />
+      <module name="gupao-study-mongodb" target="1.8" />
+      <module name="gupao-study-mybatis" target="1.8" />
+      <module name="gupao-study-mycat" target="1.8" />
+      <module name="gupao-study-netty" target="1.8" />
+      <module name="gupao-study-rabbitmq" target="1.8" />
+      <module name="gupao-study-sharding-sphere" target="1.8" />
+      <module name="gupao-study-springboot" target="1.8" />
+      <module name="gupao-study-springcloud" target="1.8" />
+      <module name="gupao-study-springframework" target="1.8" />
+      <module name="gupao-study-zookeeper" target="1.8" />
+      <module name="gupaostudy" target="1.8" />
+      <module name="self-study-networkprogram" target="1.8" />
+      <module name="selfs-study-shardingsphere" target="1.8" />
+      <module name="selfs-study-xml-parser" target="1.8" />
+      <module name="selfs-tudy-network-program" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
