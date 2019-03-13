@@ -1,7 +1,7 @@
 #-jdk  
 Java API Demo ，包含了Java中常用API Demo  
 #-design-patterns  
-常用设计模式的案例
+常用设计模式的案例  
 #-springboot  
 spring-boot的学习项目  
 #-redis  
