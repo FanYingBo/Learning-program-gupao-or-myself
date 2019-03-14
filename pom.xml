@@ -31,6 +31,8 @@
         <module>gupao-study-mycat</module>
         <module>gupao-study-rabbitmq</module>
         <module>selfs-study-shardingsphere</module>
+		<module>selfs-study-shardingsphere</module>
+		<module>gupao-study-redis</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
