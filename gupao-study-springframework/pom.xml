@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <properties>
-        <spring.ver>5.0.7.RELEASE</spring.ver>
+        <spring.ver>5.2.5.RELEASE</spring.ver>
     </properties>
     <artifactId>gupao-study-springframework</artifactId>
 
