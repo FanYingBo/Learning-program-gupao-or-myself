@@ -19,7 +19,7 @@ public class MessageUtils {
             buffer.append(beforeMessage);
             log.info("read from the channel: "+socketChannel.getRemoteAddress()+" message: "+buffer.toString());
             afterMessage = receiveMessage.substring(borderIndex+1);
-            if(afterMessage.trim().length() > 0){
+            if(afterMessage.trim().length() > 0 && !afterMessage.endsWith(border)){
                 decodeStringMessage(socketChannel,afterBuffer,afterMessage,border);
             }
         }
