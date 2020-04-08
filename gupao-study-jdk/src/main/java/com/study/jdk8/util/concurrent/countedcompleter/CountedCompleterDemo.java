@@ -1,4 +1,4 @@
-package com.study.jdk7.util.concurrent.countedcompleter;
+package com.study.jdk8.util.concurrent.countedcompleter;
 
 
 import java.util.concurrent.CountedCompleter;
@@ -14,13 +14,4 @@ public class CountedCompleterDemo {
         String invoke = searcher.putThings("jsac").invoke();
         System.out.println(invoke);
     }
-
-
-    private static class MapReduce extends CountedCompleter<Integer> {
-        @Override
-        public void compute() {
-
-        }
-    }
-
 }

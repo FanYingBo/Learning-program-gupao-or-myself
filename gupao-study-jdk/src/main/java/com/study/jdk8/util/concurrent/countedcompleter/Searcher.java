@@ -1,4 +1,4 @@
-package com.study.jdk7.util.concurrent.countedcompleter;
+package com.study.jdk8.util.concurrent.countedcompleter;
 
 import java.util.Objects;
 import java.util.concurrent.CountedCompleter;
