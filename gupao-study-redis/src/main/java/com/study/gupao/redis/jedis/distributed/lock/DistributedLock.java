@@ -1,7 +1,7 @@
 package com.study.gupao.redis.jedis.distributed.lock;
 
 
-import com.selfs.study.redis.util.JedisConnectionUtil;
+import com.study.gupao.redis.jedis.util.JedisConnectionUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
