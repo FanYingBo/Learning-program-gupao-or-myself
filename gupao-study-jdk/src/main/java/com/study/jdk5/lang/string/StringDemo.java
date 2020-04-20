@@ -1,5 +1,9 @@
 package com.study.jdk5.lang.string;
 
+import org.junit.Test;
+
+import java.util.LinkedList;
+
 /**
  * @see java.lang.String
  * 1.字符串拼接性能对比： +=""<String.valueOf()<StringBuffer<StringBuilder
@@ -7,15 +11,9 @@ package com.study.jdk5.lang.string;
  */
 public class StringDemo {
 
-    public static void main(String[] args) {
-//        strAppend();
-//        System.out.println(Arrays.toString(int2ByteArray(2223)));
 
-        strEquals();
-//        System.out.println(hexStringToByte("a21edb3c6bda1f2b4f58e6458901ec37"));
-    }
-
-    private static void strEquals(){
+    @Test
+    public void strEquals(){
         String a = new String("aa");
         String s = "aa";
         System.out.println(" == "+ (a == s));
@@ -23,7 +21,8 @@ public class StringDemo {
         System.out.println(" equals "+ a.equals(s));
 
     }
-    private static void strAppend(){
+    @Test
+    public void strAppend(){
         String str = "";
         long start = System.currentTimeMillis();
         for(int num = 0;num < 100000;num++){
@@ -91,4 +90,18 @@ public class StringDemo {
         return result;
     }
 
+    /**
+     * 反转字符串
+     */
+    @Test
+    public void testReversal(){
+        String orgStr = "give me the result";
+        String[] strArr = orgStr.split(" ");
+        LinkedList<String> list = new LinkedList<>();
+        for(String str : strArr){
+            list.addFirst(str);
+        }
+        String join = String.join(" ",list);
+        System.out.println(join);
+    }
 }
