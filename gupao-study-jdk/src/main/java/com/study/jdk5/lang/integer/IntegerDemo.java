@@ -1,6 +1,8 @@
 package com.study.jdk5.lang.integer;
 
 
+import org.junit.Test;
+
 /**
  *@see java.lang.Integer
  * getChars()
@@ -59,6 +61,8 @@ public class IntegerDemo {
 
         System.out.println(Integer.toBinaryString(3*5));//1100+11 2^2+2^0=5 --> 3<<2+3<<0 --> 3<<2 1111
         System.out.println(Integer.toBinaryString(16/8));// 除数是2的整数次幂的时候可以用二进制运算
+
+
     }
 
     private static void charsMethodVerify(){
@@ -114,4 +118,16 @@ public class IntegerDemo {
             if (x <= sizeTable[i])
                 return i+1;
     }
+
+    @Test
+    public void rotate(){
+        int i =400;
+        System.out.println(Integer.toBinaryString(i));
+        int distance = Integer.MAX_VALUE;
+        System.out.println((i << distance) + ":"+Integer.toBinaryString(i << distance));
+        System.out.println((i >>> -distance)+":" +Integer.toBinaryString(i >>> -distance)); // 防止溢出
+        int rotateLeft = Integer.rotateLeft(i, distance);
+        System.out.println(Integer.toBinaryString(rotateLeft));
+    }
+
 }
