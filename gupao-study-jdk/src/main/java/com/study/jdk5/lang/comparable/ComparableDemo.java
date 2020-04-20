@@ -1,4 +1,4 @@
-package com.study.jdk8.lang.comparable;
+package com.study.jdk5.lang.comparable;
 
 /**
  *

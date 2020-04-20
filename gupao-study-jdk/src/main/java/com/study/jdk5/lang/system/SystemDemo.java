@@ -1,5 +1,7 @@
 package com.study.jdk5.lang.system;
 
+import org.junit.Test;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -35,5 +37,30 @@ public class SystemDemo {
 //        System.out.println(dsadd == sdada);//true
 //        System.out.println(dsadd == nnsad);//false
 //        System.out.println(dsadd == nnsad.intern());//true intern方法返回的是string对象在常量池中的引用
+    }
+
+    /**
+     *
+     * System.getenv()
+     * 环境变量 返回Map
+     */
+    @Test
+    public void getSystemEnvironment(){
+        Map<String,String> environment =  System.getenv();
+        for(Map.Entry<String, String> entry:environment.entrySet()){
+            System.out.println(entry.getKey()+" -- "+entry.getValue());
+        }
+    }
+
+    /**
+     * System.getProperties()
+     * 系统参数
+     */
+    @Test
+    public void getSystemProoerties(){
+        Map<String,Object> environment =  (Map)System.getProperties();
+        for(Map.Entry<String, Object> entry:environment.entrySet()){
+            System.out.println(entry.getKey()+" -- "+entry.getValue());
+        }
     }
 }

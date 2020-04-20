@@ -1,4 +1,4 @@
-package com.study.jdk8.lang.iterable;
+package com.study.jdk5.lang.iterable;
 
 import java.util.Iterator;
 import java.util.Spliterator;
