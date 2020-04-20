@@ -16,7 +16,8 @@ zookeeper的ZClient API 和Curator API 的使用案例
 自定义实现基于spring的xml schema    
 #-mybatis  
 ORM框架mybatis的案例，以及自我封装    
-
+#-guava
+Google Guava 测试demo
 
 
 

@@ -33,6 +33,7 @@
         <module>selfs-study-shardingsphere</module>
 		<module>selfs-study-shardingsphere</module>
 		<module>gupao-study-redis</module>
+        <module>selfs-study-google-guava</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
