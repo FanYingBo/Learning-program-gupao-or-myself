@@ -3,9 +3,11 @@ package com.study.mybatis;
 import com.study.gupao.mybatis.dao.CustomOrderDao;
 import com.study.gupao.mybatis.dao.NormalCustomDao;
 import com.study.gupao.mybatis.dao.ProductInfoDao;
+import com.study.gupao.mybatis.dao.UserDao;
 import com.study.gupao.mybatis.entity.CustomOrder;
 import com.study.gupao.mybatis.entity.NormalCustom;
 import com.study.gupao.mybatis.entity.ProductInfo;
+import com.study.gupao.mybatis.entity.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -26,18 +28,21 @@ public class DaoDemo {
 
     private static ProductInfoDao productInfoDao;
 
+    private static UserDao userDao;
+
     private static final Log log = LogFactory.getLog(DaoDemo.class);
     static {
         try {
             InputStream resourceAsStream = Resources.getResourceAsStream("config/log4j.properties");
             PropertyConfigurator.configure(resourceAsStream);
 
-            normalCustomDao = new NormalCustomDao();
+//            normalCustomDao = new NormalCustomDao();
+//
+//            customOrderDao = new CustomOrderDao();
+//
+//            productInfoDao = new ProductInfoDao();
 
-            customOrderDao = new CustomOrderDao();
-
-            productInfoDao = new ProductInfoDao();
-
+            userDao = new UserDao();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,11 +54,13 @@ public class DaoDemo {
 //        testInsertCustom();
 //        udateCustom();
 //        customOrderInsert("bilibili");
-        queryCustomOne("tom");
+//        queryCustomOne("tom");
 
 //        getProductInfo("WEUIOOYEE6E8U82S");
 //        productInfoInsert("WEUIOOYEE6E8U82S");
 //        queryCustomOrderOne("1536841943500");
+        List<User> users = userDao.queryAllForList();
+        System.out.println(users);
     }
     private static void testQueryCustomList() throws Exception {
         List<NormalCustom> normalCustoms = normalCustomDao.queryAllForList();
