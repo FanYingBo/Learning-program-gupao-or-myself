@@ -24,7 +24,7 @@ public class AtomicPerformanceTestDemo {
             ICalled iCalled_1 = new ICalled() {
                 CountDownLatch countDownLatch  = new CountDownLatch(count);
                 @Override
-                public List excute() {
+                public List execute() {
                     List<Thread> threads = new ArrayList<>();
                     for (int i = 0; i < count; i++) {
                         AtomicThreadDemo atomicThreadDemo = new AtomicThreadDemo(optType, optType.getName() + "_thread_" + i, countDownLatch);

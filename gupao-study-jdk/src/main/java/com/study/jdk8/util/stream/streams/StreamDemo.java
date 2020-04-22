@@ -13,6 +13,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+/**
+ *  1.遍历对比 {@link #traversePerformance()}
+ *  2.reduce {@link #reducePerformance}当数据量超过一定的临界值（测试的list集合 超过2000000的大小时） 使用
+ *      {@link Stream#parallel()} or {@link List#parallelStream()}
+ */
 public class StreamDemo {
     public List<Integer> intList ;
 
@@ -20,26 +25,107 @@ public class StreamDemo {
 
     @Before
     public void initList(){
-        intList = ListUtils.getRanIntList(100,100);
-        stringList = ListUtils.getRanStr(100,3);
-
+        intList = ListUtils.getRanIntList(30000000,1000);
+        stringList = ListUtils.getRanStr(1000000,3);
     }
-    //    @Test
-    public void paralleStreamSort(){
+    @Test
+    public void parallelStreamSort(){
         long start = System.currentTimeMillis();
-        intList.parallelStream().sorted((int1, int2) -> Integer.compare(int1, int2)).collect(Collectors.toList());
+        intList.parallelStream().sorted(Integer::compare).collect(Collectors.toList());
         System.out.println("Collections Sort 耗时："+(System.currentTimeMillis()-start));// 较 变慢5倍
         System.out.println(intList);
     }
 
+    @Test
+    public void traversePerformance(){
+        ICalled iCalled_ = ()->{
+            for(int i=0;i<stringList.size();i++){
+                stringList.get(i);
+            }
+            return null;
+        };
+        iCalled_.printTime(Thread.currentThread(),"normal for");
+        ICalled called_ = () ->{
+            for(String string : stringList){
+                // no
+            }
+            return null;
+        };
+        called_.printTime(Thread.currentThread(),"normal for each");
+        ICalled called_1 = () ->{
+            Iterator<String> iterator = stringList.iterator();
+            while(iterator.hasNext()){
+                String next = iterator.next();
+            }
+            return null;
+        };
+        called_1.printTime(Thread.currentThread(),"iterator");
+        ICalled called = () ->{
+            stringList.stream().forEach(s -> {});
+            return null;
+        };
+        called.printTime(Thread.currentThread(),"stream for each");
+        ICalled called_2 = () ->{
+            stringList.parallelStream().forEach(s -> {});
+            return null;
+        };
+        called_2.printTime(Thread.currentThread(),"parallel stream for each");
+    }
+    @Test
+    public void reducePerformance(){
+        final int[] min = {Integer.MAX_VALUE};
+        ICalled iCalled_ = ()->{
+            for(int i=0;i<intList.size();i++){
+                Integer integer = intList.get(i);
+                if(min[0] > integer){
+                    min[0] = integer;
+                }
+            }
+            return null;
+        };
+        iCalled_.printTime(Thread.currentThread(),"normal for");
+        ICalled called_ = () ->{
+            for(int num : intList){
+                if(min[0] > num){
+                    min[0] = num;
+                }
+            }
+            System.out.println(min[0]);
+            return null;
+        };
+        called_.printTime(Thread.currentThread(),"normal for each");
+        ICalled called_1 = () ->{
+            Iterator<Integer> iterator = intList.iterator();
+            while(iterator.hasNext()){
+                Integer num = iterator.next();
+                min[0] = Math.min(min[0],num);
+            }
+            System.out.println(min[0]);
+            return null;
+        };
+
+        called_1.printTime(Thread.currentThread(),"iterator");
+        ICalled called = () ->{
+            intList.stream().reduce(min[0], (i,j) -> Math.min(i,j));
+            System.out.println(min[0]);
+            return null;
+        };
+        called.printTime(Thread.currentThread(),"stream for each");
+        ICalled called_2 = () ->{
+            intList.parallelStream().reduce(min[0], (i,j) -> Math.min(i,j));
+            System.out.println(min[0]);
+            return null;
+        };
+        called_2.printTime(Thread.currentThread(),"parallel stream for each");
+    }
     /**
      * @see java.util.stream.Stream#map(Function)
      */
-//    @Test
+    @Test
     public void streamMapOpt(){
         ICalled iCalled = new ICalled(){
             @Override
-            public List excute() {
+            public List execute() {
                 List<String> collect = stringList.stream().map(String::toUpperCase).collect(Collectors.toList());
                 return collect;
             }
@@ -50,11 +136,11 @@ public class StreamDemo {
     /**
      * @see java.util.stream.Stream#flatMap(Function)
      */
-//    @Test
+    @Test
     public void streamflatMapOpt(){
         ICalled iCalled = new ICalled(){
             @Override
-            public List excute() {
+            public List execute() {
                 Stream<List<Integer>> inputStream = Stream.of(
                         Arrays.asList(1),
                         Arrays.asList(2, 3),
@@ -71,11 +157,11 @@ public class StreamDemo {
     /**
      * @see java.util.stream.Stream#filter(Predicate)
      */
-//    @Test
+    @Test
     public void streamFilter(){
         ICalled iCalled = new ICalled(){
             @Override
-            public List excute() {
+            public List execute() {
                 return intList.stream().filter(integer -> integer%2 == 0).collect(Collectors.toList());
             }
         };
@@ -84,20 +170,11 @@ public class StreamDemo {
 
     @Test
     public void streamForEach(){
-        ICalled iCalled_ = new ICalled(){
-            @Override
-            public List excute() {
-                for(int i=0;i<stringList.size();i++){
-                    System.out.println(stringList.get(i));
-                }
-                return null;
-            }
-        };
-        iCalled_.printTime(Thread.currentThread());
+
         ICalled iCalled = new ICalled(){
             @Override
-            public List excute() {
-                stringList.stream().forEach(s -> System.out.println(s));
+            public List execute() {
+                stringList.stream().forEach(s -> {});
                 return null;
             }
         };

@@ -1,6 +1,9 @@
 package com.study.jdk5.nio.channels.filechannel;
 
+import org.junit.Test;
+
 import java.io.*;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
 /**
@@ -8,7 +11,8 @@ import java.nio.channels.FileChannel;
  */
 public class FileChannelDemo {
 
-    public static void main(String[] args) {
+    @Test
+    public void copy(){
         File file = new File("D:\\com.zip");
         FileInputStream fileInputStream = null;
         FileOutputStream fileOutputStream = null;
@@ -28,6 +32,20 @@ public class FileChannelDemo {
             e.printStackTrace();
         }
     }
-
-
+    @Test
+    public void write(){
+        File file = new File("E:\\data\\test.txt");
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file,"rw");
+            FileChannel fileChannel = randomAccessFile.getChannel();
+            String str = "test write file";
+            MappedByteBuffer map = fileChannel.map(FileChannel.MapMode.READ_WRITE, 0, str.getBytes().length);
+            map.put(str.getBytes());
+            System.out.println(map.position()); // 返回追加文件的地址 ，可以顺序写入文件
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
