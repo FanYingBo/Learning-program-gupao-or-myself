@@ -93,7 +93,7 @@ public class StreamDemo {
             System.out.println(min[0]);
             return null;
         };
-        called_.printTime(Thread.currentThread(),"normal for each");
+        called_.printTime("normal for each");
         ICalled called_1 = () ->{
             Iterator<Integer> iterator = intList.iterator();
             while(iterator.hasNext()){
@@ -104,19 +104,19 @@ public class StreamDemo {
             return null;
         };
 
-        called_1.printTime(Thread.currentThread(),"iterator");
+        called_1.printTime("iterator");
         ICalled called = () ->{
             intList.stream().reduce(min[0], (i,j) -> Math.min(i,j));
             System.out.println(min[0]);
             return null;
         };
-        called.printTime(Thread.currentThread(),"stream for each");
+        called.printTime("stream for each");
         ICalled called_2 = () ->{
             intList.parallelStream().reduce(min[0], (i,j) -> Math.min(i,j));
             System.out.println(min[0]);
             return null;
         };
-        called_2.printTime(Thread.currentThread(),"parallel stream for each");
+        called_2.printTime("parallel stream for each");
     }
     /**
      * @see java.util.stream.Stream#map(Function)
