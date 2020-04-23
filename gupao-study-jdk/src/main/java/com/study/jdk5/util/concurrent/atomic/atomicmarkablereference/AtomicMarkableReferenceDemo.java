@@ -3,13 +3,9 @@ package com.study.jdk5.util.concurrent.atomic.atomicmarkablereference;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -33,6 +29,21 @@ public class AtomicMarkableReferenceDemo {
         b = atomicMarkableReference.weakCompareAndSet(0,2,Boolean.TRUE,Boolean.TRUE);
         System.out.println(b);
     }
+
+    /**
+     * 顺序执行
+     */
+    @Test
+    public void secMarkable(){
+        for(int i = 1;i <= 10 ;i++){
+            boolean bs = atomicMarkableReference.weakCompareAndSet(i - 1, i, Boolean.TRUE, Boolean.TRUE);
+            System.out.println("["+Thread.currentThread().getName()+"]  num :" +i+" "+ bs);
+        }
+    }
+
+    /**
+     * 并发执行
+     */
     @Test
     public void concurrentMarkable(){
         int total = 10;
