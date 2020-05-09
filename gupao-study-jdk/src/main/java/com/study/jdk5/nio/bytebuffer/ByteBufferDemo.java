@@ -13,14 +13,16 @@ public class ByteBufferDemo {
     public static void main(String[] args) {
         byte[] bytes = new byte[10];
         ByteBuffer byteBuffer = ByteBuffer.wrap(bytes)
-                .putInt(122121)
-                .putInt(2121122121)
-                .putChar('事');
+                .put((byte)1).put((byte)2);
         byte b = byteBuffer.get(3);
         byte[] array = byteBuffer.array();
         byteBuffer.flip();
         System.out.println(b);
         System.out.println(Arrays.toString(array));
+        while(byteBuffer.hasRemaining()){
+            byte b1 = byteBuffer.get();
+            System.out.println(b1);
+        }
     }
 
 
