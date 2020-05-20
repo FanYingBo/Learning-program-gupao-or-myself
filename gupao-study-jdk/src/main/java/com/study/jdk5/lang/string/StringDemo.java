@@ -59,6 +59,17 @@ public class StringDemo {
         System.out.println("字符串builder    耗时："+(end-start));
     }
 
+    /**
+     * {@link ArrayStoreException}
+     */
+    @Test
+    public void subjectDemo(){
+        String[] strings = new String[2];
+        Object[] objects = strings;
+        strings[0] = "2";
+        objects[1] = Integer.parseInt("2"); // 这里会抛出 ArrayStoreException
+        System.out.println(objects[0]);
+    }
     // a21edb3c6bda1f2b4f58e6458901ec37
     /**
      * 把16进制字符串转换成字节数组
