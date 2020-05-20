@@ -15,7 +15,7 @@ import java.util.concurrent.PriorityBlockingQueue;
  * @see PriorityBlockingQueue
  * 笔试题：获得一个数组的最小的key个数  基于PriorityBlockingQueue实现
  *  PriorityBlockingQueue基于数组存储，基于比较器的存储方式。
- *  队列的第一个值永远是最小过着最大的那个值，后面的数据不确定
+ *  队列的第一个值永远是最小或者最大的那个值，后面的数据不确定
  */
 public class PriorityBlockingQueueDemo {
 

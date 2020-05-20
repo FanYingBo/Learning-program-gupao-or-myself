@@ -20,7 +20,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * 4.基于AtomicInteger
  * 5.先进先出 FIFO
  */
-public class LinkedBolckingQueueDemo {
+public class LinkedBoLockingQueueDemo {
 
     public static void main(String[] args) throws InterruptedException {
         LinkedBlockingQueue<String> linkedBlockingQueue = new LinkedBlockingQueue<>(10);
