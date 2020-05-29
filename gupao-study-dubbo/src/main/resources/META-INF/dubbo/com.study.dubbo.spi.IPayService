@@ -1,0 +1,2 @@
+aliPay = com.study.dubbo.spi.AliPayService
+weChat = com.study.dubbo.spi.WechatService
