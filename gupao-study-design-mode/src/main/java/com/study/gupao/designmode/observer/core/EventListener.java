@@ -1,13 +1,11 @@
 package com.study.gupao.designmode.observer.core;
 
-import com.study.gupao.designmode.observer.enumeration.EventType;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EventLisenter {
+public class EventListener {
 
     protected Map<Enum,Event> events = new HashMap<>();
 

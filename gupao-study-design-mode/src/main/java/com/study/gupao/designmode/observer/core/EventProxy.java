@@ -1,18 +1,17 @@
 package com.study.gupao.designmode.observer.core;
 
-import com.study.gupao.designmode.observer.core.Event;
-import com.study.gupao.designmode.observer.core.EventLisenter;
 import com.study.gupao.designmode.observer.enumeration.MouseEventType;
-import com.study.gupao.designmode.observer.mouse.Mouse;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  动态代理 无侵入性监听
+ */
 public class EventProxy implements MethodInterceptor {
 
     private Class<?> proxyedClass;
@@ -41,18 +40,20 @@ public class EventProxy implements MethodInterceptor {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(this.proxyedClass);
         enhancer.setCallback(this);
+        loadListenerMethod();
         return enhancer.create();
     }
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         System.out.println("我是代理事件....");
         proxy.invokeSuper(obj,args);
-        invokMethod(method.getName());
+        if(eventMethodMap.containsKey(method.getName())){
+            invokMethod(method.getName());
+        }
         return null;
     }
 
     private void invokMethod( String methodName){
-        loadListenerMethod();
         Enum eventType = this.eventMethodMap.get(methodName);
         try {
             this.target = callBackType.newInstance();

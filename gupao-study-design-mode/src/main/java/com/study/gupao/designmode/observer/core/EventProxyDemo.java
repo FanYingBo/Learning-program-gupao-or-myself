@@ -11,6 +11,6 @@ public class EventProxyDemo {
     public static void main(String[] args) {
         Mouse mouse = (Mouse)new EventProxy().getInstance(Mouse.class, MouseEventCallBack.class);
         mouse.onClick();
-        mouse.onDblClick();
+//        mouse.onDblClick();
     }
 }
