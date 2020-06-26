@@ -1,9 +1,10 @@
 package com.study.gupao;
 
-import com.study.gupao.bio.BioServer;
+import com.study.gupao.io.IOServer;
+import com.study.gupao.io.bio.BioServer;
 import com.study.gupao.format.StringBorderBuild;
 import com.study.gupao.netty.NettyServer;
-import com.study.gupao.nio.NioServer;
+import com.study.gupao.io.nio.NioServer;
 
 /**
  * 创建不同类型IO server

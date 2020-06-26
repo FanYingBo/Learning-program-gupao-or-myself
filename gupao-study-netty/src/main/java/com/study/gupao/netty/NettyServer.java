@@ -1,6 +1,6 @@
 package com.study.gupao.netty;
 
-import com.study.gupao.IOServer;
+import com.study.gupao.io.IOServer;
 
 public class NettyServer implements IOServer {
     @Override

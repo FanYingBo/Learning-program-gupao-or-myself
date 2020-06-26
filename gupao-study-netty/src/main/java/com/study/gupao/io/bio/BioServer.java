@@ -1,32 +1,38 @@
-package com.study.gupao.bio;
+package com.study.gupao.io.bio;
 
 
-import com.study.gupao.AbstractIOServer;
-import com.study.gupao.IOServer;
+import com.study.gupao.io.AbstractIOServer;
+import com.study.gupao.io.IOServer;
 import com.study.gupao.format.StringBorderBuild;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Slf4j
+/**
+ *
+ */
 public class BioServer extends AbstractIOServer implements IOServer {
+
+    private static final Log log = LogFactory.getLog(BioServer.class);
 
     public final static int DEFAULT_SERVER_PORT = 7212;
 
-    private final ExecutorService executors = Executors.newFixedThreadPool(10);
+    private final ExecutorService executors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     private ServerSocket serverSocket;
 
     private AtomicLong atomicLong = new AtomicLong(1);
+    private StringBorderBuild stringBorderBuild ;
 
     public BioServer(int port, StringBorderBuild stringBorderBuild){
         this.serverPort = port;
+        this.stringBorderBuild = stringBorderBuild;
     }
 
     @Override
@@ -42,7 +48,7 @@ public class BioServer extends AbstractIOServer implements IOServer {
 //                        "Thread-bio-"+atomicLong.getAndIncrement());
 //                thread.start();
                 // 使用线程池 m:n
-                executors.submit(new BioRequestHandler(socket));
+                executors.submit(new BioRequestHandler(socket, stringBorderBuild));
             }
         } catch (IOException e) {
             e.printStackTrace();

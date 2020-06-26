@@ -1,14 +1,19 @@
 package com.study.gupao;
 
 import com.study.gupao.format.StringBorderBuild;
+import com.study.gupao.io.IOServer;
 
+/**
+ * {@link #createBIOServer() create a BIO server}
+ * {@link #createNIOServer() create a NIO server}
+ */
 public class IOServerDemo {
 
     private static StringBorderBuild borderBuild = new StringBorderBuild("^","&");
 
     public static void main(String[] args) {
-//        createBIOServer();
-        createNIOServer();
+        createBIOServer();
+//        createNIOServer();
 }
 
     private static void createBIOServer(){

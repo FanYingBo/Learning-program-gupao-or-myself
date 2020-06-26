@@ -1,11 +1,12 @@
-package com.study.gupao.nio;
+package com.study.gupao.io.nio;
 
-import com.study.gupao.AbstractIOServer;
-import com.study.gupao.IOServer;
+import com.study.gupao.io.AbstractIOServer;
+import com.study.gupao.io.IOServer;
 import com.study.gupao.buffer.ReadWriteBuffer;
 import com.study.gupao.format.MessageUtils;
 import com.study.gupao.format.StringBorderBuild;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,8 +18,9 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-@Slf4j
 public class NioServer extends AbstractIOServer implements IOServer {
+
+    private static final Log log = LogFactory.getLog(NioServer.class);
 
     private InetSocketAddress inetSocketAddress;
 
@@ -173,8 +175,4 @@ public class NioServer extends AbstractIOServer implements IOServer {
         return false;
     }
 
-    @Override
-    public void run() {
-        start();
-    }
 }

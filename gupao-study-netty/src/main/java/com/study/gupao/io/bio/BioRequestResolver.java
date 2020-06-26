@@ -1,4 +1,4 @@
-package com.study.gupao.bio;
+package com.study.gupao.io.bio;
 
 
 public class BioRequestResolver {

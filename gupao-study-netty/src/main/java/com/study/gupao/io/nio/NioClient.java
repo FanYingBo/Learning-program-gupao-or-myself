@@ -1,9 +1,12 @@
-package com.study.gupao.nio;
+package com.study.gupao.io.nio;
 
 import com.study.gupao.buffer.ReadWriteBuffer;
 import com.study.gupao.format.MessageUtils;
 import com.study.gupao.format.StringBorderBuild;
+import com.study.gupao.io.IOClient;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,8 +20,9 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-@Slf4j
-public class NioClient implements Runnable{
+public class NioClient implements IOClient {
+
+    private static final Log log = LogFactory.getLog(NioClient.class);
 
     private int port;
 
@@ -49,7 +53,7 @@ public class NioClient implements Runnable{
             selector = Selector.open();
             socketChannel = SocketChannel.open();
             socketChannel.configureBlocking(false);
-            int interestOps = SelectionKey.OP_READ | SelectionKey.OP_WRITE;//注册时间
+            int interestOps = SelectionKey.OP_READ | SelectionKey.OP_WRITE;//注册事件
             socketChannel.register(selector,interestOps ,new ReadWriteBuffer(256,256));
             socketChannel.connect(inetSocketAddress);
             while(!socketChannel.finishConnect()){
@@ -71,22 +75,32 @@ public class NioClient implements Runnable{
                 Thread.sleep(1000+random.nextInt(1000));
             }
         }catch (IOException e){
-            log.error("error occurred: "+e.getMessage());
+            log.error("io error occurred: "+e.getMessage());
         } catch (InterruptedException e) {
-            log.error("error occurred: "+e.getMessage());
+            log.error("interrupted error occurred: "+e.getMessage());
         } finally {
-            try {
-                selector.close();
-            } catch (IOException e1) {
-                log.error(Thread.currentThread().getName() + " close selector failed");
-            }finally{
-                log.info(Thread.currentThread().getName() + "  closed");
-            }
+            close();
         }
 
     }
 
+    @Override
+    public boolean close() {
+        try {
+            selector.close();
+        } catch (IOException e1) {
+            log.error(Thread.currentThread().getName() + " close selector failed");
+            return Boolean.TRUE;
+        }finally{
+            log.info(Thread.currentThread().getName() + "  closed");
+        }
+        return Boolean.FALSE;
+    }
+
     private void processSelector(){
+        if(!selector.isOpen()){
+            return;
+        }
         Set<SelectionKey> selectionKeys = selector.selectedKeys();
         Iterator<SelectionKey> selectionKeyIterator = selectionKeys.iterator();
 
@@ -135,6 +149,10 @@ public class NioClient implements Runnable{
 
     private void removeSelectionKeyAfterProcess(Iterator<SelectionKey> selectionKeyIterator) {
         selectionKeyIterator.remove();
+    }
+
+    private boolean isConnected(){
+        return socketChannel.isConnected();
     }
 
 }
