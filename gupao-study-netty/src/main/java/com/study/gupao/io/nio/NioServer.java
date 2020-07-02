@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.*;
@@ -17,7 +18,15 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
-
+/**
+ *经典题：
+ * TCP建立连接是要进行三次握手，但是否完成三次握手后，服务器就处理（accept）呢
+ * {@link ServerSocketChannel#bind(SocketAddress,Integer)}
+ * backlog其实是一个连接队列，在Linux内核2.2之前，backlog大小包括半连接状态和全连接状态两种队列大小。
+ * 1.半连接大小由 端口号被listen时设置的backlog  通过netstat -l 命令查看时 Recv-Q 的队列数值（SYN等待的个数）
+ *   客户端通过 connect() 去连接正在 listen() 的服务端时，这些连接会一直处于这个 queue 里面直到被服务端 accept()
+ * 2.全连接大小由  min(backlog,somaxconn)  (/proc/sys/net/core/somaxconn 的值)决定 全连接是netstat -l 命令查看时 Send-Q 的队列数值
+ */
 public class NioServer extends AbstractIOServer implements IOServer {
 
     private static final Log log = LogFactory.getLog(NioServer.class);

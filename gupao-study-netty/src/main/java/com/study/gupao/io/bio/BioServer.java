@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -38,7 +39,8 @@ public class BioServer extends AbstractIOServer implements IOServer {
     @Override
     public void start() {
         try {
-            serverSocket = new ServerSocket(this.serverPort);
+            serverSocket = new ServerSocket();
+            serverSocket.bind(new InetSocketAddress(this.serverPort),100);
             isStart = true;
             log.info("The bio server has been created and bind port "+this.serverPort);
             while(true){

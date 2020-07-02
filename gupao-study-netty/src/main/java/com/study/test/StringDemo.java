@@ -7,14 +7,8 @@ import java.io.IOException;
 public class StringDemo {
 
     public static void main(String[] args) {
-        String str = "^21222&dasdada&^21222&dasdada&^21222&dasdada&";
+        String str = "&client-thread_first_26782&lient-thread_first_26714&&client-thread_first_16870&nt-thread_first_4232&";
 //        System.out.println(str.indexOf("&"));
-        StringBuffer stringBuffer = new StringBuffer("");
-        try {
-            MessageUtils.decodeStringMessage(stringBuffer,str,"&");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        MessageUtils.decodeStringMessage(str,"&");
     }
 }
