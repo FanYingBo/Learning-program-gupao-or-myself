@@ -1,10 +1,11 @@
 package com.study.jdk5.nio.bytebuffer;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
 
@@ -15,16 +16,57 @@ import java.util.Arrays;
  */
 public class ByteBufferDemo {
 
+    private File file;
+
+    @Before
+    public void init(){
+        file = new File("D://test.txt");
+    }
+
+    /**
+     * 直接对文件的操作，可以刷新磁盘的映射
+     */
+    @Test
+    public void testMappedByteBuffer(){
+        try {
+            String data = "hello";
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file.getAbsoluteFile(),"rw");
+            FileChannel channel = randomAccessFile.getChannel();
+            MappedByteBuffer mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, data.getBytes().length);
+            mappedByteBuffer.put(data.getBytes());
+            // mappedByteBuffer.put((byte)1); BufferOverflowException
+            randomAccessFile.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    /**
+     * 直接缓冲区
+     * {@link java.nio.DirectByteBuffer}
+     */
+    @Test
+    public void testDirectByteBuffer(){
+        // DirectByteBuffer
+        // 直接从内存中取，跳过堆内存
+        // zero copy 零拷贝
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(10);
+
+
+    }
     /**
      * 读取文件
      * @throws Exception
      */
     @Test
     public void testFileByteBuffer() throws Exception {
-        File file = new File("D:\\data.dat");
         FileInputStream fileInputStream = new FileInputStream(file);
         FileChannel channel = fileInputStream.getChannel();
+        // HeapByteBuffer
         ByteBuffer byteBuffer = ByteBuffer.allocate(10); // bytebuffer 可以设置读取指定长度的信息
+
         StringBuffer stringBuffer = new StringBuffer();
         System.out.println(channel.isOpen());
         while(channel.read(byteBuffer) > 0){
