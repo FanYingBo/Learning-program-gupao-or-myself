@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<!ELEMENT path (entityPath?,mapperPath?)>
-
-<!ELEMENT entityPath EMPTY>
-        <!ATTLIST entityPath path CDATA #REQUIRED>
-
-<!ELEMENT mapperPath EMPTY>
-        <!ATTLIST mapperPath path CDATA #REQUIRED>
