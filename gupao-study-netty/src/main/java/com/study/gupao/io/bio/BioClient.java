@@ -37,6 +37,8 @@ public class BioClient extends AbstractIOClient {
         try {
             socket.setKeepAlive(true);
             socket.connect(this.inetSocketAddress,timeOut);
+            socket.setReceiveBufferSize(9 * 1024);
+            socket.setSendBufferSize(9 * 1024);
             InputStream inputStream = socket.getInputStream();
             OutputStream outputStream = socket.getOutputStream();
             outputStream.write((Thread.currentThread().getName()+"_"+count).getBytes(StandardCharsets.UTF_8));
