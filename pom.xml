@@ -21,19 +21,18 @@
         <module>gupao-study-springboot</module>
         <module>gupao-study-springframework</module>
         <module>gupao-study-jdk</module>
-        <module>selfs-tudy-network-program</module>
+        <module>self-study-network-program</module>
         <module>gupao-study-springcloud</module>
         <module>gupao-study-mongodb</module>
         <module>gupao-study-mybatis</module>
-        <module>selfs-study-xml-parser</module>
+        <module>self-study-xml-parser</module>
         <module>gupao-study-netty</module>
         <module>gupao-study-elasticsearch</module>
         <module>gupao-study-mycat</module>
         <module>gupao-study-rabbitmq</module>
-        <module>selfs-study-shardingsphere</module>
-		<module>selfs-study-shardingsphere</module>
+        <module>self-study-shardingsphere</module>
 		<module>gupao-study-redis</module>
-        <module>selfs-study-google-guava</module>
+        <module>self-study-google-guava</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
