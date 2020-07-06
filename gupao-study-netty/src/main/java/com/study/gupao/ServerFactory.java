@@ -18,7 +18,7 @@ public class ServerFactory {
         }else if(kind.equals(IOServerKinds.NIO_SERVER)){
             return new NioServer(port,stringBorderBuild);
         }else{
-            return new NettyServer();
+            return new NettyServer(port);
         }
     }
 

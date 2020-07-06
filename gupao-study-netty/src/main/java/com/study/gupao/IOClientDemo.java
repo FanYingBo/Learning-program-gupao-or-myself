@@ -3,12 +3,19 @@ package com.study.gupao;
 import com.study.gupao.format.StringBorderBuild;
 import com.study.gupao.io.bio.BioClient;
 import com.study.gupao.io.nio.NioClient;
+import com.study.gupao.netty.NettyClient;
 
 public class IOClientDemo {
     private static StringBorderBuild borderBuild = new StringBorderBuild("^","&");
     public static void main(String[] args) {
 //        nioClientDemo();
-        ioClientDemo();
+//        ioClientDemo();
+        nettyNioClientDemo();
+    }
+
+    public static void nettyNioClientDemo(){
+        Thread thread = new Thread(new NettyClient(10231),"netty-client-thread_first");
+        thread.start();
     }
 
     public static void nioClientDemo(){

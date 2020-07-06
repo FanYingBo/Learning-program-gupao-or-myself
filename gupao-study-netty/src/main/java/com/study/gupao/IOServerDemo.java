@@ -12,17 +12,23 @@ public class IOServerDemo {
     private static StringBorderBuild borderBuild = new StringBorderBuild("^","&");
 
     public static void main(String[] args) {
-        createBIOServer();
-//        createNIOServer();
-}
+//        createBIOServer();
+        createNettyNioServer();
+    }
 
-    private static void createBIOServer(){
+    public static void createNettyNioServer(){
+        IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.NETTY_SERVER, 10231, null);
+        Thread thread = new Thread(ioServer,"netty-nio-server-thread");
+        thread.start();
+    }
+
+    public static void createBIOServer(){
         IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.BIO_SERVER,9991,borderBuild);
         Thread thread = new Thread(ioServer,"bio-server-thread");
         thread.start();
     }
 
-    private static void createNIOServer(){
+    public static void createNIOServer(){
         IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.NIO_SERVER,8081,borderBuild);
         Thread thread = new Thread(ioServer,"nio-server-thread");
         thread.start();
