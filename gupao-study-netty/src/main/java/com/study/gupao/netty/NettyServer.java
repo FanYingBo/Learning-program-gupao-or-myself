@@ -1,9 +1,9 @@
 package com.study.gupao.netty;
 
 import com.study.gupao.io.AbstractIOServer;
-import com.study.gupao.netty.core.SocketChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -13,37 +13,31 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class NettyServer extends AbstractIOServer {
+public abstract class NettyServer extends AbstractIOServer {
     private Log log = LogFactory.getLog(NettyServer.class);
 
-    private int port;
     private ServerBootstrap serverBootstrap;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workGroup;
     private ChannelFuture channelFuture;
 
     public NettyServer(int port){
-        this.port = port;
+        this.serverPort = port;
     }
 
+    public abstract ChannelInboundHandler handler();
+
     private void init(){
-        try {
-            this.bossGroup = new NioEventLoopGroup();
-            this.workGroup = new NioEventLoopGroup();
-            serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(bossGroup,workGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new SocketChannelInitializer());
-            channelFuture = serverBootstrap.bind("192.168.8.102",this.port).sync();
-            // channelFuture.channel().close().sync(); 这里会执行finally
-            channelFuture.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            log.error("bind error ",e);
-        }finally {
-            bossGroup.shutdownGracefully();
-            workGroup.shutdownGracefully();
-        }
+        // 事件循环的线程池
+        // 主线程组
+        this.bossGroup = new NioEventLoopGroup();
+        // 工作线程组
+        this.workGroup = new NioEventLoopGroup();// 若不设置工作线程则会使用主线程组来处理传播事件
+        serverBootstrap = new ServerBootstrap();
+        serverBootstrap.group(bossGroup,workGroup)
+                .channel(NioServerSocketChannel.class)
+                .handler(new LoggingHandler(LogLevel.INFO))
+                .childHandler(handler());
     }
     @Override
     public void start() {
@@ -53,10 +47,19 @@ public class NettyServer extends AbstractIOServer {
 
     @Override
     public boolean close() {
+        bossGroup.shutdownGracefully();
+        workGroup.shutdownGracefully();
         return false;
     }
 
     private void bind(){
-
+        try {
+            channelFuture = serverBootstrap.bind("192.168.8.102",this.serverPort).sync();
+            log.info("The netty nio server has been created and bind port "+this.serverPort);
+            // channelFuture.channel().close().sync(); 这里会执行finally
+            channelFuture.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            log.error("bind error ",e);
+        }
     }
 }

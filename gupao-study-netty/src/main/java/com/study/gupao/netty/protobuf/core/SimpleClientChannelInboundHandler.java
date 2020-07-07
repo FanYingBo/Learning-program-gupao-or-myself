@@ -1,12 +1,13 @@
-package com.study.gupao.netty.core;
+package com.study.gupao.netty.protobuf.core;
 
-import com.study.gupao.netty.req.FirstRequest;
-import com.study.gupao.netty.res.FirstResponse;
+import com.study.gupao.netty.protobuf.req.FirstRequest;
+import com.study.gupao.netty.protobuf.res.FirstResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class SimpleClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
@@ -30,6 +31,11 @@ public class SimpleClientChannelInboundHandler extends ChannelInboundHandlerAdap
         FirstRequest.FirstReq.Builder first = FirstRequest.FirstReq.getDefaultInstance().toBuilder();
         first.setReqId(atomicLong.getAndIncrement());
         first.setMsg("tom");
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ctx.writeAndFlush(first.build());
     }
 }

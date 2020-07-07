@@ -13,11 +13,23 @@ public class IOServerDemo {
 
     public static void main(String[] args) {
 //        createBIOServer();
-        createNettyNioServer();
+//        createNettyProtoBufNioServer();
+        createNettyHttpServer();
     }
 
-    public static void createNettyNioServer(){
-        IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.NETTY_SERVER, 10231, null);
+    /**
+     * 构建 Netty http 服务端
+     */
+    public static void createNettyHttpServer(){
+        IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.HTTP_NETTY_SERVER, 8083, null);
+        Thread thread = new Thread(ioServer,"netty-nio-server-thread");
+        thread.start();
+    }
+    /**
+     * 构建 Netty protobuf 服务端
+     */
+    public static void createNettyProtoBufNioServer(){
+        IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.PROTOBUF_NETTY_SERVER, 10231, null);
         Thread thread = new Thread(ioServer,"netty-nio-server-thread");
         thread.start();
     }

@@ -7,6 +7,7 @@ import com.study.gupao.netty.NettyClient;
 
 public class IOClientDemo {
     private static StringBorderBuild borderBuild = new StringBorderBuild("^","&");
+    private static int thread_count = 20;
     public static void main(String[] args) {
 //        nioClientDemo();
 //        ioClientDemo();
@@ -14,8 +15,10 @@ public class IOClientDemo {
     }
 
     public static void nettyNioClientDemo(){
-        Thread thread = new Thread(new NettyClient(10231),"netty-client-thread_first");
-        thread.start();
+        for(int count = 0;count < thread_count;count++){
+            Thread thread = new Thread(new NettyClient(10231),"netty-client-thread_"+count);
+            thread.start();
+        }
     }
 
     public static void nioClientDemo(){

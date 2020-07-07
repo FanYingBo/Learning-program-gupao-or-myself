@@ -1,4 +1,4 @@
-package com.study.gupao.netty.res;
+package com.study.gupao.netty.protobuf.res;
 
 option java_outer_classname="FirstResponse";
 

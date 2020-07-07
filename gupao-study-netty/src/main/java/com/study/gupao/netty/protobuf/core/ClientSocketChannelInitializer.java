@@ -1,6 +1,6 @@
-package com.study.gupao.netty.core;
+package com.study.gupao.netty.protobuf.core;
 
-import com.study.gupao.netty.res.FirstResponse;
+import com.study.gupao.netty.protobuf.res.FirstResponse;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;

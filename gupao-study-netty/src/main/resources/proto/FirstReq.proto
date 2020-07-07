@@ -1,4 +1,4 @@
-package com.study.gupao.netty.req;
+package com.study.gupao.netty.protobuf.req;
 
 option java_outer_classname="FirstRequest";
 
