@@ -4,7 +4,6 @@ import com.study.gupao.buffer.ReadWriteBuffer;
 import com.study.gupao.format.MessageUtils;
 import com.study.gupao.format.StringBorderBuild;
 import com.study.gupao.io.IOClient;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -143,6 +142,12 @@ public class NioClient implements IOClient {
             }
         }catch (Exception e){
             log.error("error occurred: "+e.getMessage());
+            selectionKey.cancel();
+            try {
+                selectionKey.channel().close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
 
     }

@@ -12,11 +12,17 @@ public class IOServerDemo {
     private static StringBorderBuild borderBuild = new StringBorderBuild("^","&");
 
     public static void main(String[] args) {
+//        createNIOServer();
 //        createBIOServer();
 //        createNettyProtoBufNioServer();
-        createNettyHttpServer();
+//        createNettyHttpServer();
+        createCustomNettyProtoBufServer();
     }
 
+    public static void createCustomNettyProtoBufServer(){
+        IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.CUSTOM_PROTO_NETTY_SERVER, 10281, null);
+        ioServer.run();
+    }
     /**
      * 构建 Netty http 服务端
      */

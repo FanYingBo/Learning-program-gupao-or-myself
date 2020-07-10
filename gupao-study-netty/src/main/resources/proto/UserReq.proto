@@ -1,0 +1,9 @@
+package com.study.gupao.netty.protobuf.req;
+
+option java_outer_classname="UserRequest";
+
+message UserLogin{
+    optional int32 userId = 1;
+    optional string userName = 2;
+    optional int32 loginType = 3;
+}

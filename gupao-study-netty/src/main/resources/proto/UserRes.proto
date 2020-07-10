@@ -1,0 +1,8 @@
+package com.study.gupao.netty.protobuf.res;
+
+option java_outer_classname="UserResponse";
+
+message LoginResult{
+    optional int32 code = 1;
+    optional string token = 2;
+}

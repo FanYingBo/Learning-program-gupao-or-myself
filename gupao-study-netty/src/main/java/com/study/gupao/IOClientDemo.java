@@ -3,7 +3,8 @@ package com.study.gupao;
 import com.study.gupao.format.StringBorderBuild;
 import com.study.gupao.io.bio.BioClient;
 import com.study.gupao.io.nio.NioClient;
-import com.study.gupao.netty.NettyClient;
+import com.study.gupao.netty.protobuf.CustomProtoBufNettyClient;
+import com.study.gupao.netty.protobuf.ProtoBufNettyClient;
 
 public class IOClientDemo {
     private static StringBorderBuild borderBuild = new StringBorderBuild("^","&");
@@ -11,12 +12,19 @@ public class IOClientDemo {
     public static void main(String[] args) {
 //        nioClientDemo();
 //        ioClientDemo();
-        nettyNioClientDemo();
+//        nettyNioClientDemo();
+        nettyCustomProtoBufClientDemo();
     }
 
+    public static void nettyCustomProtoBufClientDemo(){
+        for(int count = 0;count < thread_count;count++){
+            Thread thread = new Thread(new CustomProtoBufNettyClient(10281),"netty-client-thread_"+count);
+            thread.start();
+        }
+    }
     public static void nettyNioClientDemo(){
         for(int count = 0;count < thread_count;count++){
-            Thread thread = new Thread(new NettyClient(10231),"netty-client-thread_"+count);
+            Thread thread = new Thread(new ProtoBufNettyClient(10231),"netty-client-thread_"+count);
             thread.start();
         }
     }

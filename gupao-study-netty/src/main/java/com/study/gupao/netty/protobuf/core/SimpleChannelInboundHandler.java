@@ -21,10 +21,15 @@ public class SimpleChannelInboundHandler extends ChannelInboundHandlerAdapter {
         FirstResponse.FirstRes.Builder res = FirstResponse.FirstRes.getDefaultInstance().toBuilder();
         res.setResMsg("Hello "+msg1);
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         ctx.writeAndFlush(res.build());
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error(ctx.channel().remoteAddress() + " cause "+cause.getMessage());
     }
 }

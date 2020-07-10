@@ -23,6 +23,11 @@ public class SimpleClientChannelInboundHandler extends ChannelInboundHandlerAdap
     }
 
     @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error(ctx.channel().remoteAddress() + " cause "+cause.getMessage());
+    }
+
+    @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         write(ctx);
     }
@@ -32,7 +37,7 @@ public class SimpleClientChannelInboundHandler extends ChannelInboundHandlerAdap
         first.setReqId(atomicLong.getAndIncrement());
         first.setMsg("tom");
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
