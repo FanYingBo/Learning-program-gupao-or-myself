@@ -4,6 +4,7 @@ import com.study.gupao.io.AbstractIOServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInboundHandler;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -29,12 +30,16 @@ public abstract class NettyServer extends AbstractIOServer {
 
     private void init(){
         // 事件循环的线程池
-        // 主线程组
+        // 主线程组 用来处理accept
         this.bossGroup = new NioEventLoopGroup();
-        // 工作线程组
+        // 工作线程组 用来处理数据
         this.workGroup = new NioEventLoopGroup();// 若不设置工作线程则会使用主线程组来处理传播事件
         serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup,workGroup)
+                // 操作系统参数/proc/sys/net/core/wmem_max
+                .option(ChannelOption.SO_SNDBUF,32 * 1024)
+                // 操作系统参数/proc/sys/net/core/rmem_max
+                .option(ChannelOption.SO_RCVBUF,32 * 1024)
                 .channel(NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(handler());
