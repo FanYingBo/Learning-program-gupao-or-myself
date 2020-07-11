@@ -46,4 +46,15 @@ public class BitOperation {
             System.out.println(num + " 不是 2 的指数");
         }
     }
+
+    /**
+     *除以2
+     */
+    @Test
+    public void getMidNum(){
+        Random ran = new Random();
+        int anInt = ran.nextInt(100);
+        int mid = anInt >>> 1;
+        System.out.println(anInt + " 除以2等于 "+ mid);
+    }
 }
