@@ -2,6 +2,8 @@ package com.study.bitopt;
 
 import org.junit.Test;
 
+import java.util.Random;
+
 /**
  * BitOperation test
  */
@@ -26,6 +28,22 @@ public class BitOperation {
             System.out.println(ran + "是偶数");
         }else{
             System.out.println(ran + "是奇数");
+        }
+    }
+
+    /**
+     * 判断是否为2的指数
+     */
+    @Test
+    public void isPowerOfTwo(){
+        int[] orgData = {2,8,12,14,19,24,32,64,127,128};
+        Random ran = new Random();
+        int i = ran.nextInt(orgData.length);
+        int num = orgData[i];
+        if((num&-num) == num){
+            System.out.println(num + " 是 2 的指数");
+        }else{
+            System.out.println(num + " 不是 2 的指数");
         }
     }
 }
