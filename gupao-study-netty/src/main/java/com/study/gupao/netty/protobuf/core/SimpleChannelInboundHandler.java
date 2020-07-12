@@ -10,6 +10,11 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * {@link io.netty.channel.DefaultChannelPipeline#fireChannelRead(Object)}
+ * {@link io.netty.channel.AbstractChannelHandlerContext#invokeChannelRead(Object)}
+ * {@link ChannelInboundHandlerAdapter#channelRead(ChannelHandlerContext, Object)}
+ */
 public class SimpleChannelInboundHandler extends ChannelInboundHandlerAdapter {
 
     private static final Log log = LogFactory.getLog(SimpleChannelInboundHandler.class);
