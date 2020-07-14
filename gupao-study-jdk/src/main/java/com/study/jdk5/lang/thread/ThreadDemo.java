@@ -27,19 +27,19 @@ public class ThreadDemo {
 
 //        interruptState02();
 
-//        interruptState03();
+        interruptState03();
 
-        Thread thread = new Thread(() -> {
-            while(true){
-
-            }
-        });
-        thread.start();
-        thread.join();
-        Thread thread_ = new Thread(() -> {
-            System.out.println("Thread2");
-        });
-        thread_.start();
+//        Thread thread = new Thread(() -> {
+//            while(true){
+//
+//            }
+//        });
+//        thread.start();
+//        thread.join();
+//        Thread thread_ = new Thread(() -> {
+//            System.out.println("Thread2");
+//        });
+//        thread_.start();
     }
 
 
@@ -76,7 +76,7 @@ public class ThreadDemo {
         Thread thread = new Thread(() -> {
             while(true){
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(10000); // sleep 结束后会先复位当前线程，类似Thread.interrupted
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
