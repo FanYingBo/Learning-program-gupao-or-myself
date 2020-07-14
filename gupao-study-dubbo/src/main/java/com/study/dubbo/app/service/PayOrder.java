@@ -14,6 +14,17 @@ public class PayOrder implements Serializable {
 
     private int payType;
 
+    public PayOrder(){
+    }
+
+    public PayOrder(String productId, String productDesc, char currencyCode, float money, int payType) {
+        this.productId = productId;
+        this.productDesc = productDesc;
+        this.currencyCode = currencyCode;
+        this.money = money;
+        this.payType = payType;
+    }
+
     public String getProductId() {
         return productId;
     }
@@ -60,8 +71,22 @@ public class PayOrder implements Serializable {
         private char currencyCode;
         private float money;
         private int  payType;
+
+        private static final Builder DEFAULT_INSTANCE = new Builder();
+        public static Builder getDefaultInstance(){
+            return DEFAULT_INSTANCE;
+        }
+
         public static Builder newBuilder(){
             return new Builder();
+        }
+
+        public Builder toBuilder(){
+            this.money = 0;
+            this.payType = 0;
+            this.productId = null;
+            this.productDesc = null;
+            return this;
         }
 
         public Builder productId(String productId){
