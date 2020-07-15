@@ -14,7 +14,7 @@ public class JDKSerializableDemo {
     public static void main(String[] args) {
         PayOrder payOrder = SerializableObjectFactory.getPayOrder();
         byte[] ser = serialize(payOrder);
-        System.out.println("序列化成功");
+        System.out.println("序列化成功 "+ser.length);
         PayOrder deserialize = deserialize(ser, PayOrder.class);
         System.out.println("反序列化成功 "+ deserialize);
     }
