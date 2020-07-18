@@ -42,7 +42,7 @@ public class AtomicMarkableReferenceDemo {
     }
 
     /**
-     * 并发执行
+     * 并发执行,线程执行的先后顺序不以言因此导致无法被替换
      */
     @Test
     public void concurrentMarkable(){
@@ -58,7 +58,7 @@ public class AtomicMarkableReferenceDemo {
                     condition.signal();
                 }
                 lock.unlock();
-            });
+            },"thread-"+i);
             thread.start();
         }
 
