@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>io.netty.buffer.PooledUnsafeDirectByteBuf</OriginalElement>
+  <nodes>
+    <node x="630.0" y="585.0">io.netty.buffer.PooledUnsafeDirectByteBuf</node>
+    <node x="666.0" y="234.0">io.netty.buffer.AbstractByteBuf</node>
+    <node x="0.0" y="702.0">io.netty.buffer.PooledUnsafeHeapByteBuf</node>
+    <node x="714.0" y="117.0">io.netty.buffer.ByteBuf</node>
+    <node x="592.6388888888889" y="468.0">io.netty.buffer.UnpooledUnsafeDirectByteBuf</node>
+    <node x="36.0" y="585.0">io.netty.buffer.PooledHeapByteBuf</node>
+    <node x="355.6388888888889" y="468.0">io.netty.buffer.PooledByteBuf</node>
+    <node x="997.6388888888889" y="468.0">io.netty.buffer.UnpooledDirectByteBuf</node>
+    <node x="577.5" y="0.0">java.lang.Comparable</node>
+    <node x="570.0" y="351.0">io.netty.buffer.AbstractReferenceCountedByteBuf</node>
+    <node x="778.5" y="0.0">io.netty.util.ReferenceCounted</node>
+    <node x="321.0" y="585.0">io.netty.buffer.PooledDirectByteBuf</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="io.netty.buffer.AbstractReferenceCountedByteBuf" target="io.netty.buffer.AbstractByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="0.0" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.ByteBuf" target="io.netty.util.ReferenceCounted">
+      <point x="36.25" y="-33.5" />
+      <point x="822.75" y="92.0" />
+      <point x="905.0" y="92.0" />
+      <point x="0.0" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.PooledDirectByteBuf" target="io.netty.buffer.PooledByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="465.5" y="560.0" />
+      <point x="464.1388888888889" y="560.0" />
+      <point x="0.0" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.PooledUnsafeHeapByteBuf" target="io.netty.buffer.PooledHeapByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="0.0" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.AbstractByteBuf" target="io.netty.buffer.ByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="0.0" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.UnpooledUnsafeDirectByteBuf" target="io.netty.buffer.AbstractReferenceCountedByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="785.1388888888889" y="443.0" />
+      <point x="786.5" y="443.0" />
+      <point x="0.0" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.PooledByteBuf" target="io.netty.buffer.AbstractReferenceCountedByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="464.1388888888889" y="443.0" />
+      <point x="642.1666666666666" y="443.0" />
+      <point x="-144.33333333333337" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.PooledHeapByteBuf" target="io.netty.buffer.PooledByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="168.5" y="560.0" />
+      <point x="391.8055555555556" y="560.0" />
+      <point x="-72.33333333333331" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.ByteBuf" target="java.lang.Comparable">
+      <point x="-36.25" y="-33.5" />
+      <point x="750.25" y="92.0" />
+      <point x="668.0" y="92.0" />
+      <point x="0.0" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.PooledUnsafeDirectByteBuf" target="io.netty.buffer.PooledByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="810.5" y="560.0" />
+      <point x="536.4722222222222" y="560.0" />
+      <point x="72.33333333333326" y="33.5" />
+    </edge>
+    <edge source="io.netty.buffer.UnpooledDirectByteBuf" target="io.netty.buffer.AbstractReferenceCountedByteBuf">
+      <point x="0.0" y="-33.5" />
+      <point x="1154.138888888889" y="443.0" />
+      <point x="930.8333333333334" y="443.0" />
+      <point x="144.33333333333337" y="33.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8479087452471483" x="673.5" y="374.5" />
+  <SelectedNodes>
+    <node>io.netty.buffer.PooledUnsafeDirectByteBuf</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

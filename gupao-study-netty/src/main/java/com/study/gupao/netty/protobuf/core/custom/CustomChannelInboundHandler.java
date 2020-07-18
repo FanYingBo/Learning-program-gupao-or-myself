@@ -18,7 +18,7 @@ public class CustomChannelInboundHandler extends ChannelInboundHandlerAdapter {
             CustomMsgData msgData = (CustomMsgData)msg;
             // 这里可以根据main cmd 和 sub cmd 分发处理事件
             log.info("handler data main cmd " + msgData.getMainCmd() +" sub cmd "+msgData.getSubCmd());
-            handlerMsg(ctx,msgData);
+            onMsgEvent(ctx,msgData.getMainCmd() , msgData.getSubCmd(), msgData.getProtoBufData());
         }else{
             log.error("unknown message type" + msg);
         }
@@ -29,16 +29,18 @@ public class CustomChannelInboundHandler extends ChannelInboundHandlerAdapter {
         log.error(ctx.channel().remoteAddress() + " cause "+cause.getMessage());
     }
 
-    private void handlerMsg(ChannelHandlerContext ctx,CustomMsgData msgData){
-        if(msgData.getMainCmd() == CMDConstants.MainCmdConstants.USER
-                && msgData.getSubCmd() == CMDConstants.UserSubCmdConstants.LOGIN){
+
+
+    private void onMsgEvent(ChannelHandlerContext ctx,int mainCmd,int subCmd, byte[] msgData){
+        if(mainCmd == CMDConstants.MainCmdConstants.USER
+                && subCmd == CMDConstants.UserSubCmdConstants.LOGIN){
             try {
-                UserRequest.UserLogin messageLite = msgData.parseTo(UserRequest.UserLogin.getDefaultInstance());
-                log.info("Login info "+ messageLite.toString());
+                UserRequest.UserLogin messageLite = UserRequest.UserLogin.parseFrom(msgData);
+                log.info("["+Thread.currentThread().getName()+"]  ["+ctx.channel().id()+"] Login info "+ messageLite.toString());
                 UserResponse.LoginResult.Builder builder = UserResponse.LoginResult.getDefaultInstance().toBuilder();
                 builder.setCode(0);
                 builder.setToken("hhowqe21323qwwe123ojda==");
-                ctx.writeAndFlush(new CustomMsgData(msgData.getMainCmd(),msgData.getSubCmd(),builder.build()));
+                ctx.writeAndFlush(new CustomMsgData(mainCmd ,subCmd ,builder.build()));
             } catch (InvalidProtocolBufferException e) {
                 log.error("msg parse error" + e.getMessage());
             }

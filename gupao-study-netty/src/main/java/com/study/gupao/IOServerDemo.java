@@ -20,7 +20,7 @@ public class IOServerDemo {
     }
 
     public static void createCustomNettyProtoBufServer(){
-        IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.CUSTOM_PROTO_NETTY_SERVER, 10281, null);
+        IOServer ioServer = ServerFactory.create(ServerFactory.IOServerKinds.CUSTOM_PROTO_NETTY_SERVER, 11028, null);
         ioServer.run();
     }
     /**

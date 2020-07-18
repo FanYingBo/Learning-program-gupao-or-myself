@@ -1,7 +1,5 @@
 package com.study.gupao.io;
 
-import com.study.gupao.io.IOServer;
-
 public abstract class AbstractIOServer implements IOServer {
 
     protected int serverPort;
@@ -13,6 +11,7 @@ public abstract class AbstractIOServer implements IOServer {
         try{
             start();
         }catch (Exception exception){
+            exception.printStackTrace();
             close();
         }
     }

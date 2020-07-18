@@ -6,6 +6,6 @@ import com.study.gupao.netty.protobuf.core.custom.CustomClientProtoBufChannelIni
 public class CustomProtoBufNettyClient extends NettyClient {
 
     public CustomProtoBufNettyClient(int port) {
-        super(port, new CustomClientProtoBufChannelInitializer());
+        super(port,1, new CustomClientProtoBufChannelInitializer());
     }
 }

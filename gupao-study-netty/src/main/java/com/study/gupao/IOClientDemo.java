@@ -17,10 +17,8 @@ public class IOClientDemo {
     }
 
     public static void nettyCustomProtoBufClientDemo(){
-        for(int count = 0;count < thread_count;count++){
-            Thread thread = new Thread(new CustomProtoBufNettyClient(10281),"netty-client-thread_"+count);
-            thread.start();
-        }
+        Thread thread = new Thread(new CustomProtoBufNettyClient(11028),"netty-client-thread");
+        thread.start();
     }
     public static void nettyNioClientDemo(){
         for(int count = 0;count < thread_count;count++){

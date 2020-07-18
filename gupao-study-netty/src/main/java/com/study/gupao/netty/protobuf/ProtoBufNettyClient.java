@@ -6,6 +6,6 @@ import com.study.gupao.netty.protobuf.core.ProtoBufSocketChannelInitializer;
 public class ProtoBufNettyClient extends NettyClient {
 
     public ProtoBufNettyClient(int port) {
-        super(port, new ProtoBufSocketChannelInitializer());
+        super(port, 1, new ProtoBufSocketChannelInitializer());
     }
 }

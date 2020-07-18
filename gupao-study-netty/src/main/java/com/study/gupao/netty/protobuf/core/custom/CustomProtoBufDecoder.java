@@ -21,9 +21,6 @@ public class CustomProtoBufDecoder extends ByteToMessageDecoder {
             in.resetReaderIndex();
             return ;
         }
-
-        log.info("main cmd "+mainCmd+" sub cmd "+subCmd);
-
         //开始读取核心protobuf数据
         ByteBuf bodyByteBuf = in.readBytes(bodyLen);
         byte[] array;

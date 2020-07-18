@@ -13,6 +13,9 @@ import io.netty.handler.logging.LoggingHandler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 
 public abstract class NettyServer extends AbstractIOServer {
     private Log log = LogFactory.getLog(NettyServer.class);
@@ -21,8 +24,19 @@ public abstract class NettyServer extends AbstractIOServer {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workGroup;
     private ChannelFuture channelFuture;
+    private String hostName;
 
     public NettyServer(int port){
+        this(null,port);
+        try {
+            this.hostName = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public NettyServer(String hostName, int port){
+        this.hostName = hostName;
         this.serverPort = port;
     }
 
@@ -36,10 +50,11 @@ public abstract class NettyServer extends AbstractIOServer {
         this.workGroup = new NioEventLoopGroup();// 若不设置工作线程则会使用主线程组来处理传播事件
         serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup,workGroup)
+                .option(ChannelOption.SO_BACKLOG,128)
                 // 操作系统参数/proc/sys/net/core/wmem_max
-                .option(ChannelOption.SO_SNDBUF,32 * 1024)
+//                .option(ChannelOption.SO_SNDBUF,32 * 1024)
                 // 操作系统参数/proc/sys/net/core/rmem_max
-                .option(ChannelOption.SO_RCVBUF,32 * 1024)
+//                .option(ChannelOption.SO_RCVBUF,32 * 1024)
                 .channel(NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(handler());
@@ -59,7 +74,7 @@ public abstract class NettyServer extends AbstractIOServer {
 
     private void bind(){
         try {
-            channelFuture = serverBootstrap.bind("192.168.8.102",this.serverPort).sync();
+            channelFuture = serverBootstrap.bind(this.hostName,this.serverPort).sync();
             log.info("The netty nio server has been created and bind port "+this.serverPort);
             // channelFuture.channel().close().sync(); 这里会执行finally
             channelFuture.channel().closeFuture().sync();
