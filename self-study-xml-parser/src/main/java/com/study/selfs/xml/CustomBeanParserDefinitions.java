@@ -9,7 +9,7 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.lang.Nullable;
 import org.w3c.dom.Element;
 
-public class CustomBeanParserDefintions implements BeanDefinitionParser {
+public class CustomBeanParserDefinitions implements BeanDefinitionParser {
 
     @Nullable
     @Override
