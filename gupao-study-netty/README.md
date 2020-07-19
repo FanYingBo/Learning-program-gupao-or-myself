@@ -4,8 +4,18 @@ NioEventLoop 聚合了多路复用器Selector，由于读写操作都是非阻�
 
 # 零拷贝
 
-* java 中的零拷贝 ByteBuffer.allocateDirect(nums)，直接在堆外申请内存（Ring3->Ring0  用户态切换到内核态），通过C的malloc来进行分配的，分配的内存是系统本地的内存，申请后会保留内存地址（`long address`）。但是堆外内存的申请开销极大，而且使用DirectByteBuffer，内存空间不够的情况下，会触发System.gc() （Full GC）回收。
-* Netty中
+* Java 中的零拷贝 ByteBuffer.allocateDirect(nums)，直接在堆外申请内存（Ring3->Ring0  用户态切换到内核态），通过C的malloc来进行分配的，分配的内存是系统本地的内存，申请后会保留内存地址（`long address`）。但是堆外内存的申请开销极大，而且使用DirectByteBuffer，内存空间不够的情况下，会触发System.gc() （Full GC）回收。
+* Netty中默认使用了Java的DirectByteBuffer，使用了内存的池化技术（PooledUnsafeDirectByteBuf ，PooledUnsafeHeapByteBuf），这些在Netty都是对内存使用的划分（Pooled 和UnPooled ，Safe和Unsafe，Heap和Direct）
+
+# 线程模型
+
+* Reactor 单线程模型 
+* Reactor 多线程模型
+* 主从Reactor多线程模型
+
+# 无锁化串行设计
+
+* Channel.pipeLine() 串行化处理InBound (decode)和OutBound(encode)事件，完成数据的编解码，并最终到达消息处理器
 
 # Netty 高性能之道
 
