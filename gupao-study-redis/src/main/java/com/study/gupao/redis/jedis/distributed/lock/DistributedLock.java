@@ -8,13 +8,23 @@ import redis.clients.jedis.Transaction;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * 分布式所只关注redis中的key
+ */
 public class DistributedLock {
 
-    private volatile AtomicReference<String> luaHash;
+    private AtomicReference<String> luaHash;
+    private boolean isCluster;
+
 
     public DistributedLock(){
-        luaHash = new AtomicReference<>();
+        this(false);
     }
+    public DistributedLock(boolean isCluster){
+        luaHash = new AtomicReference<>();
+        this.isCluster = isCluster;
+    }
+
     // 获取分布式 锁
     public String acquireLock(String lockKeyName, long acquireTimeOut, int lockTimeOutSec){
         String identifier = UUID.randomUUID().toString();
@@ -28,11 +38,10 @@ public class DistributedLock {
                     jedis.expire(lockKey, lockTimeOutSec);
                     return identifier;
                 }
-                // 判断key是否被更改
+                // 判断key有没有超时时间
                 if(jedis.ttl(lockKey) == -1){
                     jedis.expire(lockKey, lockTimeOutSec);
                 }
-                Thread.sleep(acquireTimeOut/3);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -73,6 +82,12 @@ public class DistributedLock {
         return isRelease;
     }
 
+    /**
+     * 借助Lua脚本的原子性操作来释放锁
+     * @param lockKeyName
+     * @param identifier
+     * @return
+     */
     public boolean releaseLockWithLua(String lockKeyName,String identifier){
         String lockKey = "lock:"+lockKeyName;
         String lua ="if redis.call('get',KEYS[1]) == ARGV[1] then " +

@@ -14,13 +14,9 @@ public class JedisConnectionUtil {
         jedisPoolConfig.setMaxIdle(5);
         jedisPoolConfig.setMaxTotal(100);
         jedisPoolConfig.setMaxWaitMillis(1000*5);
-        pool=new JedisPool(jedisPoolConfig,"192.168.1.156",6379);
+        pool=new JedisPool(jedisPoolConfig,"192.168.8.156",6379);
     }
     public static Jedis getJedis(){
         return pool.getResource();
-    }
-
-    public static void returnJedis(){
-
     }
 }
