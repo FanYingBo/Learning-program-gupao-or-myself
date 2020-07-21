@@ -51,7 +51,7 @@ public abstract class NettyServer extends AbstractIOServer {
         serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup,workGroup)
                 .option(ChannelOption.SO_BACKLOG,128)
-                // 操作系统参数/proc/sys/net/core/wmem_max
+                // 操作系统参数/proc/sys/net/core/ewmem_max
 //                .option(ChannelOption.SO_SNDBUF,32 * 1024)
                 // 操作系统参数/proc/sys/net/core/rmem_max
 //                .option(ChannelOption.SO_RCVBUF,32 * 1024)
