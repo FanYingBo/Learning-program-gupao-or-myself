@@ -18,7 +18,6 @@ public class RedisClusterDistributedLock {
         try{
             long endTime = System.currentTimeMillis() + acquireTimeOut;
             while(endTime > System.currentTimeMillis()){
-                System.out.printf("[%s] \n",Thread.currentThread().getName());
                 if(JedisClusterUtil.setex(lockKey, lockTimeOutSec, identifier) == 1){
                     return identifier;
                 }
