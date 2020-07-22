@@ -98,6 +98,41 @@ public class JedisClusterUtil {
         return jedisCluster.ttl(key);
     }
 
+    public static long lPush(String key,String ... values){
+        return jedisCluster.lpush(key,values);
+    }
+
+    public static long rPush(String key,String ... values){
+        return jedisCluster.rpush(key,values);
+    }
+
+    public static String lPop(String key){
+        return jedisCluster.lpop(key);
+    }
+
+    public static List<String> blPop(String key){
+        try{
+            return jedisCluster.blpop(30000,key);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * redis 阻塞队列
+     * @param key
+     * @return
+     */
+    public static List<String> bRPop(String key){
+        try{
+            return jedisCluster.brpop(30000,key);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static Transaction multi(String key){
         Jedis jedis = getJedisByKey(key);
         if(jedis != null){
