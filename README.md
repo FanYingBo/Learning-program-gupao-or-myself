@@ -39,9 +39,17 @@ Java API Demo ，包含了Java中常用API Demo --`com.study`
 * 模板方法模式
 * 工厂模式和工厂方法模式
 
+## Netty
+
+* Netty + ProtoBuf 实现服务端与客户端
+* mainCmd subCmd 命令模式设计消息格式
+* Netty 实现HTTP服务端
+* TCP相关参数分析
+
 ## Dubbo
 
 * Dubbo SPI
+* Dubbo consumer and Dubbo provider
 
 # SpringBoot  
 
@@ -59,12 +67,7 @@ zookeeper的ZClient API 和Curator API 的使用案例
 # Mybatis  
 ORM框架mybatis的案例，以及自我封装    
 # Guava
-Google Guava 测试demo
-
-## Netty
-
-* Netty + ProtoBuf 实现服务端与客户端
-* Netty 实现HTTP服务端
+Google Guava 测试demo（RateLimter,BloomFilter Joiner...）
 
 ## Network-Program
 
