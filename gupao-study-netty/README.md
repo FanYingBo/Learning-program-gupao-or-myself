@@ -1,4 +1,4 @@
-# 异步非阻塞
+
 
 NioEventLoop 聚合了多路复用器Selector，由于读写操作都是非阻塞的，充分提升了IO线程的运行效率，避免由于频繁的IO阻塞导致的线程挂起产生的对CPU资源的浪费
 
@@ -64,3 +64,53 @@ NioEventLoop 聚合了多路复用器Selector，由于读写操作都是非阻�
     public static final ChannelOption<Boolean> TCP_NODELAY = valueOf("TCP_NODELAY");
 ```
 
+# 部分参数解析
+
+* SO_BACKLOG
+
+  backlog其实是一个连接队列，在Linux内核2.2之前，backlog大小包括半连接状态（SYN QUEUE）和全连接状态（ACCPET QUEUE）两种队列大小。
+
+  1. 半连接大小由 端口号被listen时设置的backlog  通过netstat -l 命令查看时 Recv-Q 的队列数值（SYN等待的个数）客户端通过 connect() 去连接正在 listen() 的服务端时，这些连接会一直处于这个 queue 里面直到被服务端 accept()
+
+  2. 全连接大小由  min(backlog,somaxconn)  (/proc/sys/net/core/somaxconn 的值)决定 全连接是netstat -l 命令查看时 Send-Q 的队列数值
+
+  3. 对应的Linux服务器相关参数
+
+     |                 参数名                  | 意义                                                         | 取值                 |
+     | :-------------------------------------: | ------------------------------------------------------------ | -------------------- |
+     |  proc/sys/net/ipv4/tcp_max_syn_backlog  | 服务器端在接受客户端的SYN请求之后，在记忆领域可存储的客户端SYN请求数 | 1024(不同系统不一样) |
+     |  proc/sys/net/ipv4/tcp_synack_retries   | 服务器端处于SYN_RECV状态之后，在一定时间没有收到客户端的SYN时，再次发送SYN ACK的次数 | 5(默认)              |
+     | proc/sys/net/ipv4/tcp_abort_on_overflow | 当服务器端高负荷时，给客户端发送RST（Connect reset）切断连接来保护服务器 | 0(默认无效)          |
+     |      /proc/sys/net/core/somaxconn       | ACCEPT QUEUE 也称为全连接队列的大小，由该值min(backlog,somaxconn)决定 | 128(不同系统不一样)  |
+     |    /proc/sys/net/ipv4/tcp_syncookies    | SYN cookies是为了防止TCP SYN flood攻击开发的对应方法之一     | 0是无效，1是有效。   |
+
+  ```
+  经典题：
+  * TCP建立连接是要进行三次握手，但是否完成三次握手后，服务器就处理（accept）呢
+  ```
+
+* TCP_NODELAY
+
+  Socket编程中，TCP_NODELAY选项是用来控制是否开启Nagle算法，该算法是为了提高较慢的广域网传输效率，减小小分组的报文个数，该算法要求一个TCP连接上最多只能有一个未被确认的小分组，在该小分组的确认到来之前，不能发送其他小分组。这里的小分组指的是报文长度小于MSS(Max Segment Size)长度的分组（MSS是在TCP握手的时候在报文选项里面进行通告的大小，主要是用来限制另一端发送数据的长度，防止IP数据包被分段，提高效率，一般是链路层的传输最大传输单元大小减去IP首部与TCP首部大小）；
+
+* SO_KEEPALIVE
+
+  TCP内嵌有心跳包,以服务端为例,当server检测到超过一定时间(/proc/sys/net/ipv4/tcp_keepalive_time 7200 即2小时)没有数据传输,那么会向client端发送一个keepalive packet,此时client端有三种反应:
+
+  1. client端连接正常,返回一个ACK.server端收到ACK后重置计时器,在2小时后在发送探测.如果2小时内连接上有数据传输,那么在该时间的基础上向后推延2小时发送探测包;
+  2. 客户端异常关闭,或网络断开。client无响应,server收不到ACK,在一定时间(/proc/sys/net/ipv4/tcp_keepalive_intvl 75 即75秒)后重发keepalive packet, 并且重发一定次数(/proc/sys/net/ipv4/tcp_keepalive_probes 9 即9次);
+  3. 客户端曾经崩溃,但已经重启.server收到的探测响应是一个复位,server端终止连接。
+
+  | 参数名                                  | 意义                                        | 取值         |
+  | --------------------------------------- | ------------------------------------------- | ------------ |
+  | /proc/sys/net/ipv4/tcp_keepalive_time   | 发送心跳（ACK）的周期时间                   | 7200（默认） |
+  | /proc/sys/net/ipv4/tcp_keepalive_probes | 没有收到心跳时继续发送ACK的次数             | 9（默认）    |
+  | /proc/sys/net/ipv4/tcp_keepalive_intvl  | 没有收到心跳时继续发送ACK的频率（时间间隔） | 75           |
+
+  
+
+  
+
+  
+
+  
