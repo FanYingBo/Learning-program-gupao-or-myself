@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * curator 创建分布式锁
- * 新构思：使用阻塞队列构建，听过监听来访问阻塞队列，获取锁
+ *
  */
 public class CuratorDistributeLock extends AbstractDistributeLockClient implements DistributeLockClient {
 
@@ -86,6 +86,14 @@ public class CuratorDistributeLock extends AbstractDistributeLockClient implemen
         return null;
     }
 
+    /**
+     * 这里会造成节点的太多次创建（新方式：线程阻塞方式）
+     * @param times 重试次数
+     * @param delayInterval 延时，周期
+     * @param timeOut 超时时间
+     * @param timeUnit
+     * @return
+     */
     @Override
     public String acquireWithBlocked(int times, int delayInterval, int timeOut, TimeUnit timeUnit) {
         if(timeOut < delayInterval){

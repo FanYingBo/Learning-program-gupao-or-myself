@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DistributeLockTestDemo {
 
-    static int THREAD_COUNT = 10;
+    static int THREAD_COUNT = 20;
 
     public static void main(String[] args) {
         CuratorDistributeLockClientFactory factory = new CuratorDistributeLockClientFactory();
@@ -17,7 +17,7 @@ public class DistributeLockTestDemo {
             for(int i = 0;i < THREAD_COUNT;i++){
                 Thread thread = new Thread(()->{
                     Stopwatch started = Stopwatch.createStarted();
-                    String lockPath = client.acquireWithBlocked(5,1,3,TimeUnit.SECONDS);
+                    String lockPath = client.acquireWithBlocked(10,1,10,TimeUnit.SECONDS);
                     System.out.println("["+Thread.currentThread().getName()+"]获取锁："+lockPath+" 耗时："+started.elapsed(TimeUnit.MILLISECONDS));
                     client.releaseLock();
                     System.out.println("["+Thread.currentThread().getName()+"]释放锁："+lockPath);
