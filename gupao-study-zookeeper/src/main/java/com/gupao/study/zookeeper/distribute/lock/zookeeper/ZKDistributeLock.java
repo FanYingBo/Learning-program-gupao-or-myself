@@ -2,9 +2,11 @@ package com.gupao.study.zookeeper.distribute.lock.zookeeper;
 
 import com.gupao.study.zookeeper.distribute.lock.AbstractDistributeLockClient;
 import com.gupao.study.zookeeper.distribute.lock.DistributeLockClient;
+import com.gupao.study.zookeeper.distribute.lock.LockException;
 import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * zookeeper 客户端创建分布式锁
@@ -34,13 +36,17 @@ public class ZKDistributeLock extends AbstractDistributeLockClient implements Di
     }
 
     @Override
-    public String acquireWithBlocked(int times, int delayInterval, int timeOut) {
-
+    public String acquireWithBlocked(int times, int delayInterval, int timeOut, TimeUnit timeUnit) throws LockException {
         return null;
     }
 
     @Override
     public boolean releaseLock(String path) {
+        return false;
+    }
+
+    @Override
+    public boolean releaseLock() {
         return false;
     }
 }

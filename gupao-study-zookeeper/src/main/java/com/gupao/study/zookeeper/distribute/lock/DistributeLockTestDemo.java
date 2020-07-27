@@ -1,5 +1,6 @@
 package com.gupao.study.zookeeper.distribute.lock;
 
+import com.google.common.base.Stopwatch;
 import com.gupao.study.zookeeper.distribute.lock.curator.CuratorDistributeLockClientFactory;
 
 import java.util.concurrent.TimeUnit;
@@ -14,16 +15,12 @@ public class DistributeLockTestDemo {
             DistributeLockClient client = factory.createClient(20000, "192.168.8.156:2181", "/curator");
             client.start();
             for(int i = 0;i < THREAD_COUNT;i++){
-                Integer integer = new Integer(i);
                 Thread thread = new Thread(()->{
-                    try {
-                        TimeUnit.SECONDS.sleep(integer);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    String lockPath = client.acquireWithUnBlocked();
-                    System.out.println("["+Thread.currentThread().getName()+"]获取锁："+lockPath);
-                    client.releaseLock(lockPath);
+                    Stopwatch started = Stopwatch.createStarted();
+                    String lockPath = client.acquireWithBlocked(5,1,3,TimeUnit.SECONDS);
+                    System.out.println("["+Thread.currentThread().getName()+"]获取锁："+lockPath+" 耗时："+started.elapsed(TimeUnit.MILLISECONDS));
+                    client.releaseLock();
+                    System.out.println("["+Thread.currentThread().getName()+"]释放锁："+lockPath);
                 });
                 thread.start();
             }

@@ -1,5 +1,7 @@
 package com.gupao.study.zookeeper.distribute.lock;
 
+import java.util.concurrent.TimeUnit;
+
 public interface DistributeLockClient {
 
     void start();
@@ -16,7 +18,7 @@ public interface DistributeLockClient {
      * @param timeOut 超时时间
      * @return
      */
-    String acquireWithBlocked(int times,int delayInterval, int timeOut) throws LockException;
+    String acquireWithBlocked(int times, int delayInterval, int timeOut, TimeUnit timeUnit) throws LockException;
 
     /**
      * 释放锁
@@ -24,5 +26,10 @@ public interface DistributeLockClient {
      * @return
      */
     boolean releaseLock(String path);
-
+    /**
+     * 释放锁
+     * @param path
+     * @return
+     */
+    boolean releaseLock();
 }
