@@ -1,10 +1,7 @@
 package com.gupao.study.zookeeper.client;
 
-import org.apache.zookeeper.*;
-import org.apache.zookeeper.data.Stat;
-
-import java.io.IOException;
-import java.util.List;
+import org.apache.zookeeper.ZooDefs;
+import org.apache.zookeeper.ZooKeeper;
 
 
 /**
@@ -18,7 +15,7 @@ public class ZookeeperApiDemo {
         String path = "/zkclient";
         String childPath = "/zkchild";
 
-        ZookeeperClient zookeeperClient = new ZookeeperClient("127.0.0.1:2181",10000,true);
+        ZookeeperClient zookeeperClient = new ZookeeperClient("192.168.8.156:2181",10000,true);
         zookeeperClient.createPersistentPath(path,"w2122",ZooDefs.Ids.OPEN_ACL_UNSAFE);
         zookeeperClient.createPersistentChildPath(path,childPath,"dddd",ZooDefs.Ids.OPEN_ACL_UNSAFE);
 //        zookeeperClient.deletePath(path+childPath);
