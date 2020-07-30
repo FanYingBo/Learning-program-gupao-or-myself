@@ -8,9 +8,6 @@
     <artifactId>gupao-study</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
-    <properties>
-        <spring.ver>5.0.7.RELEASE</spring.ver>
-    </properties>
 
     <modules>
         <module>gupao-study-design-mode</module>
@@ -34,11 +31,7 @@
 		<module>gupao-study-redis</module>
         <module>self-study-google-guava</module>
     </modules>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter</artifactId>
-        <version>2.0.6.RELEASE</version>
-    </parent>
+
     <build>
         <resources>
             <resource>
@@ -101,6 +94,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
         </dependency>
 
 

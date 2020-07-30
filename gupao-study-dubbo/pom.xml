@@ -10,8 +10,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gupao-study-dubbo</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>dubbo-service-provider</module>
+        <module>dubbo-service-consumer</module>
+        <module>dubbo-service-api</module>
+        <module>dubbo-service-provider-second</module>
+        <module>dubbo-service-impl</module>
+    </modules>
 
-     <dependencies>
+    <dependencies>
          <dependency>
              <groupId>org.apache.dubbo</groupId>
              <artifactId>dubbo</artifactId>
@@ -43,5 +51,39 @@
              <version>4.0.2</version>
          </dependency>
      </dependencies>
-
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <!-- 是否替换资源中的属性-->
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,4 +1,4 @@
-package com.study.gupao.netty.protobuf.req;
+package com.study.dubbo.netty.protobuf.req;
 
 option java_outer_classname="UserRequest";
 

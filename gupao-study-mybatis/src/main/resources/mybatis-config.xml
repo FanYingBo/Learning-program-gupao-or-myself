@@ -26,7 +26,7 @@
     </settings>
 
     <typeAliases>
-        <package name="com.study.gupao.mybatis.entity"/>
+        <package name="com.study.dubbo.mybatis.entity"/>
     </typeAliases>
     <!--<typeHandlers>-->
         <!--<typeHandler handler="org.apache.ibatis.type.SqlDateTypeHandler" javaType="java.util.Date" jdbcType="DATE"/>-->
@@ -36,7 +36,7 @@
     <!--</typeHandlers>-->
     <!--<objectFactory type=""/>-->
     <plugins>
-        <plugin interceptor="com.study.gupao.mybatis.interceptor.StatementHandlerInterceptor">
+        <plugin interceptor="com.study.dubbo.mybatis.interceptor.StatementHandlerInterceptor">
         </plugin>
     </plugins>
 

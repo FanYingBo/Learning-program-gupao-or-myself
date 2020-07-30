@@ -1,4 +1,4 @@
-package com.study.gupao.netty.protobuf.res;
+package com.study.dubbo.netty.protobuf.res;
 
 option java_outer_classname="UserResponse";
 

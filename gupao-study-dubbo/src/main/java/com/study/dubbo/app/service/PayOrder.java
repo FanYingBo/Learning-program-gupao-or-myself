@@ -121,13 +121,13 @@ public class PayOrder implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "PayOrder{" +
-                "productId='" + productId + '\'' +
-                ", productDesc='" + productDesc + '\'' +
-                ", currencyCode=" + currencyCode +
-                ", money=" + money +
-                ", payType=" + payType +
-                '}';
+        public String toString() {
+            return "PayOrder{" +
+                    "productId='" + productId + '\'' +
+                    ", productDesc='" + productDesc + '\'' +
+                    ", currencyCode=" + currencyCode +
+                    ", money=" + money +
+                    ", payType=" + payType +
+                    '}';
     }
 }

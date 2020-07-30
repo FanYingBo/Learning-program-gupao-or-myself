@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.study.gupao.mybatis.mapper.NormalCustomMapper">
+<mapper namespace="com.study.dubbo.mybatis.mapper.NormalCustomMapper">
     <sql id="normal_custom_column_list">
         name,sex,age,birth,id_number,
         is_vip,addr,job,createdate
@@ -18,7 +18,7 @@
         <result property="addr" column="addr"/>
         <!--column 經測試必須是 { }寫法 -->
         <collection property="orderList" column="{name=name}" ofType="customOrder"
-                    select="com.study.gupao.mybatis.mapper.CustomOrderMapper.queryAllForListByForeignKey"/>
+                    select="com.study.dubbo.mybatis.mapper.CustomOrderMapper.queryAllForListByForeignKey"/>
     </resultMap>
 
     <cache eviction="LRU" readOnly="true"/>

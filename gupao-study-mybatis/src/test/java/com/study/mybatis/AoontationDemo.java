@@ -1,12 +1,11 @@
 package com.study.mybatis;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
-import com.study.gupao.mybatis.anno.mapper.CustomOrderMapper;
-import com.study.gupao.mybatis.anno.mapper.NormalCustomMapper;
-import com.study.gupao.mybatis.anno.mapper.ProductInfoMapper;
-import com.study.gupao.mybatis.entity.CustomOrder;
-import com.study.gupao.mybatis.entity.NormalCustom;
-import com.study.gupao.mybatis.entity.ProductInfo;
+import com.study.dubbo.mybatis.anno.mapper.CustomOrderMapper;
+import com.study.dubbo.mybatis.anno.mapper.NormalCustomMapper;
+import com.study.dubbo.mybatis.anno.mapper.ProductInfoMapper;
+import com.study.dubbo.mybatis.entity.CustomOrder;
+import com.study.dubbo.mybatis.entity.NormalCustom;
+import com.study.dubbo.mybatis.entity.ProductInfo;
 import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.mapping.Environment;
@@ -18,7 +17,6 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.type.TypeAliasRegistry;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 public class AoontationDemo {
