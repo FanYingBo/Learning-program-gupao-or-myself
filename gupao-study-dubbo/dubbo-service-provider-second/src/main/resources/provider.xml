@@ -1,0 +1,21 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:dubbo-provider.properties</value>
+            </list>
+        </property>
+    </bean>
+    <dubbo:application name="dubbo-provider" />
+    <dubbo:registry address="zookeeper://192.168.8.156:2181" timeout="30000"/>
+    <dubbo:protocol name="dubbo" port="10422"/>
+    <dubbo:service interface="com.study.dubbo.IPayService" ref="weChatPayService" group="weChatPayService"/>
+    <dubbo:service interface="com.study.dubbo.IPayService" ref="alipayService" group="alipayService"/>
+    <bean class="com.study.dubbo.api.impl.WeChatPayService" name="weChatPayService"/>
+    <bean class="com.study.dubbo.api.impl.AlipayService" name="alipayService"/>
+</beans>

@@ -14,15 +14,26 @@ public class PayOrder implements Serializable {
 
     private int payType;
 
+    private int serverId;
+
+    public int getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(int serverId) {
+        this.serverId = serverId;
+    }
+
     public PayOrder(){
     }
 
-    public PayOrder(String productId, String productDesc, char currencyCode, float money, int payType) {
+    public PayOrder(String productId, String productDesc, char currencyCode, float money, int payType, int serverId) {
         this.productId = productId;
         this.productDesc = productDesc;
         this.currencyCode = currencyCode;
         this.money = money;
         this.payType = payType;
+        this.serverId = serverId;
     }
 
     public String getProductId() {
@@ -70,7 +81,8 @@ public class PayOrder implements Serializable {
         private String productDesc;
         private char currencyCode;
         private float money;
-        private int  payType;
+        private int payType;
+        private int serverId;
 
         private static final Builder DEFAULT_INSTANCE = new Builder();
         public static Builder getDefaultInstance(){
@@ -86,6 +98,7 @@ public class PayOrder implements Serializable {
             this.payType = 0;
             this.productId = null;
             this.productDesc = null;
+            this.serverId = 0;
             return this;
         }
 
@@ -109,6 +122,10 @@ public class PayOrder implements Serializable {
             this.payType = payType;
             return this;
         }
+        public Builder serverId(int serverId){
+            this.serverId = serverId;
+            return this;
+        }
         public PayOrder build(){
             PayOrder payOrder = new PayOrder();
             payOrder.productId = productId;
@@ -116,18 +133,20 @@ public class PayOrder implements Serializable {
             payOrder.productDesc = productDesc;
             payOrder.currencyCode = currencyCode;
             payOrder.payType = payType;
+            payOrder.serverId = serverId;
             return payOrder;
         }
     }
 
     @Override
-        public String toString() {
-            return "PayOrder{" +
-                    "productId='" + productId + '\'' +
-                    ", productDesc='" + productDesc + '\'' +
-                    ", currencyCode=" + currencyCode +
-                    ", money=" + money +
-                    ", payType=" + payType +
-                    '}';
+    public String toString() {
+        return "PayOrder{" +
+                "productId='" + productId + '\'' +
+                ", productDesc='" + productDesc + '\'' +
+                ", currencyCode=" + currencyCode +
+                ", money=" + money +
+                ", payType=" + payType +
+                ", serverId=" + serverId +
+                '}';
     }
 }
