@@ -29,7 +29,7 @@ public class JedisClusterUtil {
                 hostAndPorts.add(new HostAndPort(strings[0],Integer.parseInt(strings[1])));
              }
             );
-            GenericObjectPoolConfig<Jedis> genericObjectPoolConfig = new GenericObjectPoolConfig();
+            GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
             genericObjectPoolConfig.setMaxIdle(Integer.parseInt(properties.get("redis.maxIdle").toString()));
             genericObjectPoolConfig.setMaxTotal(Integer.parseInt(properties.get("redis.maxTotal").toString()));
             genericObjectPoolConfig.setMaxIdle(Integer.parseInt(properties.get("redis.minIdle").toString()));
