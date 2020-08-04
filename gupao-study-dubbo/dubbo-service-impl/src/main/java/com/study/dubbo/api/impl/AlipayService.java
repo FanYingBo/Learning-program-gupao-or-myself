@@ -4,10 +4,12 @@ import com.study.dubbo.IPayService;
 import com.study.dubbo.mode.PayOrder;
 import com.study.dubbo.mode.PayOrderContext;
 import com.study.dubbo.mode.PayType;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@Service("alipayService")
+@DubboService(interfaceClass = IPayService.class ,group = "alipayService")
+@Service
 public class AlipayService implements IPayService {
     @Value("${test.dubbo.server.id}")
     private String serverId;

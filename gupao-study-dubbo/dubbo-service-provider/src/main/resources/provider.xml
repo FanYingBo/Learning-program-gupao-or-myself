@@ -12,10 +12,10 @@
         </property>
     </bean>
     <dubbo:application name="dubbo-provider" />
-    <dubbo:registry address="zookeeper://192.168.8.156:2181" timeout="30000"/>
+    <dubbo:registry address="zookeeper://192.168.8.156:2181" timeout="3000"/>
     <dubbo:protocol name="dubbo" port="10421"/>
     <dubbo:service interface="com.study.dubbo.IPayService" ref="weChatPayService" group="weChatPayService"/>
-    <dubbo:service interface="com.study.dubbo.IPayService" ref="alipayService" group="alipayService"/>
+    <dubbo:service path="" interface="com.study.dubbo.IPayService" ref="alipayService" group="alipayService"/>
     <bean class="com.study.dubbo.api.impl.WeChatPayService" name="weChatPayService"/>
     <bean class="com.study.dubbo.api.impl.AlipayService" name="alipayService"/>
 </beans>
