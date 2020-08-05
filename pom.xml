@@ -17,7 +17,6 @@
         <module>gupao-study-kafka</module>
         <module>gupao-study-springboot</module>
         <module>gupao-study-springframework</module>
-        <module>gupao-study-jdk</module>
         <module>self-study-network-program</module>
         <module>gupao-study-springcloud</module>
         <module>gupao-study-mongodb</module>
@@ -30,6 +29,8 @@
         <module>self-study-shardingsphere</module>
 		<module>gupao-study-redis</module>
         <module>self-study-google-guava</module>
+        <module>self-study-quartz</module>
+        <module>self-study-jdk</module>
     </modules>
 
     <build>
