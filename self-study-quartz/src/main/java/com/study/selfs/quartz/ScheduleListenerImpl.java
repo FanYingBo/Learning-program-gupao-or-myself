@@ -4,6 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 
+/**
+ * 通过监听可以进行任务状态的变更。
+ */
 public class ScheduleListenerImpl implements SchedulerListener {
 
     private static final Log logger = LogFactory.getLog(ScheduleListenerImpl.class);

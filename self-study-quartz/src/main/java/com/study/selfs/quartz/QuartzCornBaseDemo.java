@@ -5,6 +5,7 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * quartz 克隆表达式实现
@@ -14,6 +15,9 @@ import java.util.Calendar;
  * 2.{@link DailyTimeIntervalScheduleBuilder}
  * 3.{@link CalendarIntervalScheduleBuilder}
  * 4.{@link CronScheduleBuilder}
+ *
+ * Quartz 会自动加载 quartz.properties 参数配置文件
+ * Quartz 根据
  *
  */
 public class QuartzCornBaseDemo {
@@ -47,23 +51,23 @@ public class QuartzCornBaseDemo {
                     .withDescription("")
                     .withIdentity(jobKey)
                     .build();
-            scheduler.getListenerManager().addTriggerListener(new TriggerListenerImpl());
+//            scheduler.getListenerManager().addTriggerListener(new TriggerListenerImpl());
             scheduler.getListenerManager().addSchedulerListener(new ScheduleListenerImpl());
             scheduler.scheduleJob(job,trigger);
             scheduler.start();
-//            TimeUnit.SECONDS.sleep(15);
+            TimeUnit.SECONDS.sleep(15);
 //            scheduler.interrupt(jobKey);
             // 停止执行但不是不执行，等唤醒后累计的任务次数会重新执行
 //            scheduler.pauseJob(jobKey);
 //            TimeUnit.SECONDS.sleep(15);
             // 唤醒的时候会把未执行重新执行
 //            scheduler.resumeJob(jobKey);
-//            scheduler.unscheduleJob(triggerKey);
-//            scheduler.deleteJob(jobKey);
+            scheduler.unscheduleJob(triggerKey);
+            scheduler.deleteJob(jobKey);
 
         } catch (SchedulerException e) {
             e.printStackTrace();
-//        } catch (InterruptedException e) {
+        } catch (InterruptedException e) {
 //            e.printStackTrace();
         }
 
