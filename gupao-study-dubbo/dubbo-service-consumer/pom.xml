@@ -7,6 +7,18 @@
   <groupId>com.study.gupao</groupId>
   <artifactId>dubbo-service-consumer</artifactId>
   <version>1.0.0</version>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <name>dubbo-service-consumer</name>
   <!-- FIXME change it to the project's website -->
@@ -16,6 +28,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <spring.ver>5.1.7.RELEASE</spring.ver>
   </properties>
 
   <dependencies>

@@ -2,10 +2,12 @@
        xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
-
-    <dubbo:application name="dubbo-consumer"/>
+       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd ">
+    <dubbo:application name="dubbo-consumer" >
+        <dubbo:parameter key="qos.enable" value="false"/>
+    </dubbo:application>
     <dubbo:registry address="zookeeper://192.168.8.156:2181"/>
     <dubbo:reference id="weChatPayService" interface="com.study.dubbo.IPayService" group="weChatPayService"/>
     <dubbo:reference id="alipayService" interface="com.study.dubbo.IPayService" group="alipayService"/>
+    <bean id="applicationContextUtil" class="com.study.dubbo.consumer.ApplicationContextUtil" lazy-init="false"></bean>
 </beans>
