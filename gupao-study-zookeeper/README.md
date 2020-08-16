@@ -197,9 +197,415 @@ public class Stat implements Record {
 
    问题：无法处理leader服务器崩溃退出带来的不一致问题，因此需要崩溃恢复
 
+   ## Watcher 机制
+
+   1. 存储：exists ， getData， setWatches，getChildren， getChildren2等操作会增加事件，最终存储在不同的Path 对应的 DataTree中，watcher 的实质是`ServerCnxn`连接。客户端在 setWatches 时会有三种watcher类型DataWatches，ExistWatches，ChildWatches ，服务端只保留两种类型的watcher （dataWatches，childWatches），existWatcher 只用来推送 `NodeCreated` 事件
+   2. 触发：`org.apache.zookeeper.server.FinalRequestProcessor` 最终的处理类进行监听事件的发布
+
+   ```java
+   public class FinalRequestProcessor implements RequestProcessor {
+   	public void processRequest(Request request) {
+           if (LOG.isDebugEnabled()) {
+               LOG.debug("Processing request:: " + request);
+           }
+           // request.addRQRec(">final");
+           long traceMask = ZooTrace.CLIENT_REQUEST_TRACE_MASK;
+           if (request.type == OpCode.ping) {
+               traceMask = ZooTrace.SERVER_PING_TRACE_MASK;
+           }
+           if (LOG.isTraceEnabled()) {
+               ZooTrace.logRequest(LOG, traceMask, 'E', request, "");
+           }
+           ProcessTxnResult rc = null;
+           synchronized (zks.outstandingChanges) {
+               while (!zks.outstandingChanges.isEmpty()
+                       && zks.outstandingChanges.get(0).zxid <= request.zxid) {
+                   ChangeRecord cr = zks.outstandingChanges.remove(0);
+                   if (cr.zxid < request.zxid) {
+                       LOG.warn("Zxid outstanding "
+                               + cr.zxid
+                               + " is less than current " + request.zxid);
+                   }
+                   if (zks.outstandingChangesForPath.get(cr.path) == cr) {
+                       zks.outstandingChangesForPath.remove(cr.path);
+                   }
+               }
+               if (request.hdr != null) {
+                  TxnHeader hdr = request.hdr;
+                  Record txn = request.txn;
+   				// 这里处理请求时，发布Watcher事件
+                   // 通过txn 发送WatcherEvent到客户端
+                  rc = zks.processTxn(hdr, txn); 
+               }
+               // do not add non quorum packets to the queue.
+               if (Request.isQuorum(request.type)) {
+                   zks.getZKDatabase().addCommittedProposal(request);
+               }
+           }
+   
+           if (request.hdr != null && request.hdr.getType() == OpCode.closeSession) {
+               ServerCnxnFactory scxn = zks.getServerCnxnFactory();
+               // this might be possible since
+               // we might just be playing diffs from the leader
+               if (scxn != null && request.cnxn == null) {
+                   // calling this if we have the cnxn results in the client's
+                   // close session response being lost - we've already closed
+                   // the session/socket here before we can send the closeSession
+                   // in the switch block below
+                   scxn.closeSession(request.sessionId);
+                   return;
+               }
+           }
+   
+           if (request.cnxn == null) {
+               return;
+           }
+           ServerCnxn cnxn = request.cnxn;
+   
+           String lastOp = "NA";
+           zks.decInProcess();
+           Code err = Code.OK;
+           Record rsp = null;
+           boolean closeSession = false;
+           try {
+               if (request.hdr != null && request.hdr.getType() == OpCode.error) {
+                   throw KeeperException.create(KeeperException.Code.get((
+                           (ErrorTxn) request.txn).getErr()));
+               }
+   
+               KeeperException ke = request.getException();
+               if (ke != null && request.type != OpCode.multi) {
+                   throw ke;
+               }
+   
+               if (LOG.isDebugEnabled()) {
+                   LOG.debug("{}",request);
+               }
+               switch (request.type) {
+               case OpCode.ping: {
+                   zks.serverStats().updateLatency(request.createTime);
+   
+                   lastOp = "PING";
+                   cnxn.updateStatsForResponse(request.cxid, request.zxid, lastOp,
+                           request.createTime, Time.currentElapsedTime());
+   
+                   cnxn.sendResponse(new ReplyHeader(-2,
+                           zks.getZKDatabase().getDataTreeLastProcessedZxid(), 0), null, "response");
+                   return;
+               }
+               case OpCode.createSession: {
+                   zks.serverStats().updateLatency(request.createTime);
+   
+                   lastOp = "SESS";
+                   cnxn.updateStatsForResponse(request.cxid, request.zxid, lastOp,
+                           request.createTime, Time.currentElapsedTime());
+   
+                   zks.finishSessionInit(request.cnxn, true);
+                   return;
+               }
+               case OpCode.multi: {
+                   lastOp = "MULT";
+                   rsp = new MultiResponse() ;
+   
+                   for (ProcessTxnResult subTxnResult : rc.multiResult) {
+   
+                       OpResult subResult ;
+   
+                       switch (subTxnResult.type) {
+                           case OpCode.check:
+                               subResult = new CheckResult();
+                               break;
+                           case OpCode.create:
+                               subResult = new CreateResult(subTxnResult.path);
+                               break;
+                           case OpCode.delete:
+                               subResult = new DeleteResult();
+                               break;
+                           case OpCode.setData:
+                               subResult = new SetDataResult(subTxnResult.stat);
+                               break;
+                           case OpCode.error:
+                               subResult = new ErrorResult(subTxnResult.err) ;
+                               break;
+                           default:
+                               throw new IOException("Invalid type of op");
+                       }
+   
+                       ((MultiResponse)rsp).add(subResult);
+                   }
+   
+                   break;
+               }
+               case OpCode.create: {
+                   lastOp = "CREA";
+                   rsp = new CreateResponse(rc.path);
+                   err = Code.get(rc.err);
+                   break;
+               }
+               case OpCode.delete: {
+                   lastOp = "DELE";
+                   err = Code.get(rc.err);
+                   break;
+               }
+               case OpCode.setData: {
+                   lastOp = "SETD";
+                   rsp = new SetDataResponse(rc.stat);
+                   err = Code.get(rc.err);
+                   break;
+               }
+               case OpCode.setACL: {
+                   lastOp = "SETA";
+                   rsp = new SetACLResponse(rc.stat);
+                   err = Code.get(rc.err);
+                   break;
+               }
+               case OpCode.closeSession: {
+                   lastOp = "CLOS";
+                   closeSession = true;
+                   err = Code.get(rc.err);
+                   break;
+               }
+               case OpCode.sync: {
+                   lastOp = "SYNC";
+                   SyncRequest syncRequest = new SyncRequest();
+                   ByteBufferInputStream.byteBuffer2Record(request.request,
+                           syncRequest);
+                   rsp = new SyncResponse(syncRequest.getPath());
+                   break;
+               }
+               case OpCode.check: {
+                   lastOp = "CHEC";
+                   rsp = new SetDataResponse(rc.stat);
+                   err = Code.get(rc.err);
+                   break;
+               }
+               case OpCode.exists: {
+                   lastOp = "EXIS";
+                   // TODO we need to figure out the security requirement for this!
+                   ExistsRequest existsRequest = new ExistsRequest();
+                   ByteBufferInputStream.byteBuffer2Record(request.request,
+                           existsRequest);
+                   String path = existsRequest.getPath();
+                   if (path.indexOf('\0') != -1) {
+                       throw new KeeperException.BadArgumentsException();
+                   }
+                   Stat stat = zks.getZKDatabase().statNode(path, existsRequest
+                           .getWatch() ? cnxn : null);
+                   rsp = new ExistsResponse(stat);
+                   break;
+               }
+               case OpCode.getData: {
+                   lastOp = "GETD";
+                   GetDataRequest getDataRequest = new GetDataRequest();
+                   ByteBufferInputStream.byteBuffer2Record(request.request,
+                           getDataRequest);
+                   DataNode n = zks.getZKDatabase().getNode(getDataRequest.getPath());
+                   if (n == null) {
+                       throw new KeeperException.NoNodeException();
+                   }
+                   PrepRequestProcessor.checkACL(zks, zks.getZKDatabase().aclForNode(n),
+                           ZooDefs.Perms.READ,
+                           request.authInfo);
+                   Stat stat = new Stat();
+                   byte b[] = zks.getZKDatabase().getData(getDataRequest.getPath(), stat,
+                           getDataRequest.getWatch() ? cnxn : null);
+                   rsp = new GetDataResponse(b, stat);
+                   break;
+               }
+               case OpCode.setWatches: {
+                   lastOp = "SETW";
+                   SetWatches setWatches = new SetWatches();
+                   // XXX We really should NOT need this!!!!
+                   request.request.rewind();
+                   ByteBufferInputStream.byteBuffer2Record(request.request, setWatches);
+                   long relativeZxid = setWatches.getRelativeZxid();
+                   // 客户端设置watcher
+                   zks.getZKDatabase().setWatches(relativeZxid, 
+                           setWatches.getDataWatches(), 
+                           setWatches.getExistWatches(),
+                           setWatches.getChildWatches(), cnxn);
+                   break;
+               }
+               case OpCode.getACL: {
+                   lastOp = "GETA";
+                   GetACLRequest getACLRequest = new GetACLRequest();
+                   ByteBufferInputStream.byteBuffer2Record(request.request,
+                           getACLRequest);
+                   Stat stat = new Stat();
+                   List<ACL> acl = 
+                       zks.getZKDatabase().getACL(getACLRequest.getPath(), stat);
+                   rsp = new GetACLResponse(acl, stat);
+                   break;
+               }
+               case OpCode.getChildren: {
+                   lastOp = "GETC";
+                   GetChildrenRequest getChildrenRequest = new GetChildrenRequest();
+                   ByteBufferInputStream.byteBuffer2Record(request.request,
+                           getChildrenRequest);
+                   DataNode n = zks.getZKDatabase().getNode(getChildrenRequest.getPath());
+                   if (n == null) {
+                       throw new KeeperException.NoNodeException();
+                   }
+                   PrepRequestProcessor.checkACL(zks, zks.getZKDatabase().aclForNode(n),
+                           ZooDefs.Perms.READ,
+                           request.authInfo);
+                   List<String> children = zks.getZKDatabase().getChildren(
+                           getChildrenRequest.getPath(), null, getChildrenRequest
+                                   .getWatch() ? cnxn : null);
+                   rsp = new GetChildrenResponse(children);
+                   break;
+               }
+               case OpCode.getChildren2: {
+                   lastOp = "GETC";
+                   GetChildren2Request getChildren2Request = new GetChildren2Request();
+                   ByteBufferInputStream.byteBuffer2Record(request.request,
+                           getChildren2Request);
+                   Stat stat = new Stat();
+                   DataNode n = zks.getZKDatabase().getNode(getChildren2Request.getPath());
+                   if (n == null) {
+                       throw new KeeperException.NoNodeException();
+                   }
+                   PrepRequestProcessor.checkACL(zks, zks.getZKDatabase().aclForNode(n),
+                           ZooDefs.Perms.READ,
+                           request.authInfo);
+                   List<String> children = zks.getZKDatabase().getChildren(
+                           getChildren2Request.getPath(), stat, getChildren2Request
+                                   .getWatch() ? cnxn : null);
+                   rsp = new GetChildren2Response(children, stat);
+                   break;
+               }
+               }
+           } catch (SessionMovedException e) {
+               // session moved is a connection level error, we need to tear
+               // down the connection otw ZOOKEEPER-710 might happen
+               // ie client on slow follower starts to renew session, fails
+               // before this completes, then tries the fast follower (leader)
+               // and is successful, however the initial renew is then 
+               // successfully fwd/processed by the leader and as a result
+               // the client and leader disagree on where the client is most
+               // recently attached (and therefore invalid SESSION MOVED generated)
+               cnxn.sendCloseSession();
+               return;
+           } catch (KeeperException e) {
+               err = e.code();
+           } catch (Exception e) {
+               // log at error level as we are returning a marshalling
+               // error to the user
+               LOG.error("Failed to process " + request, e);
+               StringBuilder sb = new StringBuilder();
+               ByteBuffer bb = request.request;
+               bb.rewind();
+               while (bb.hasRemaining()) {
+                   sb.append(Integer.toHexString(bb.get() & 0xff));
+               }
+               LOG.error("Dumping request buffer: 0x" + sb.toString());
+               err = Code.MARSHALLINGERROR;
+           }
+   
+           long lastZxid = zks.getZKDatabase().getDataTreeLastProcessedZxid();
+           ReplyHeader hdr =
+               new ReplyHeader(request.cxid, lastZxid, err.intValue());
+   
+           zks.serverStats().updateLatency(request.createTime);
+           cnxn.updateStatsForResponse(request.cxid, lastZxid, lastOp,
+                       request.createTime, Time.currentElapsedTime());
+   
+           try {
+               cnxn.sendResponse(hdr, rsp, "response");
+               if (closeSession) {
+                   cnxn.sendCloseSession();
+               }
+           } catch (IOException e) {
+               LOG.error("FIXMSG",e);
+           }
+       }
+   }
+   ```
+
+   
+
+   
+
+   ## 客户端请求处理
+
+   Leader 和Follower 节点都遵循以下步骤启动请求处理程序
+
+   ```java
+   public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
+   	// zookeeper 服务请求启动步骤
+   	public synchronized void startup() {
+           if (sessionTracker == null) {
+               createSessionTracker(); // 创建session的监听
+           }
+           startSessionTracker();
+           setupRequestProcessors();
+   
+           registerJMX();
+   
+           setState(State.RUNNING);
+           notifyAll();
+       }	
+       // ... ...
+   }
+   ```
+
+   1. Leader 节点客户端请求处理
+
+      ```java
+      public class LeaderZooKeeperServer extends QuorumZooKeeperServer {
+          // ... ...
+          // 责任链异步处理
+      	@Override
+          protected void setupRequestProcessors() {
+              RequestProcessor finalProcessor = new FinalRequestProcessor(this);
+              RequestProcessor toBeAppliedProcessor = new Leader.ToBeAppliedRequestProcessor(
+                      finalProcessor, getLeader().toBeApplied);
+              commitProcessor = new CommitProcessor(toBeAppliedProcessor,
+                      Long.toString(getServerId()), false,
+                      getZooKeeperServerListener());
+              commitProcessor.start();
+              ProposalRequestProcessor proposalProcessor = new ProposalRequestProcessor(this,
+                      commitProcessor);
+              proposalProcessor.initialize();
+              firstProcessor = new PrepRequestProcessor(this, proposalProcessor);
+              ((PrepRequestProcessor)firstProcessor).start();
+          }
+      
+          // ... ...
+      }
+      ```
+
+      
+
+   2. Follower 节点客户端请求处理
+
+      ```java
+      public class FollowerZooKeeperServer extends LearnerZooKeeperServer {
+          // ... ...
+          // 责任链异步处理
+      	@Override
+          protected void setupRequestProcessors() {
+              RequestProcessor finalProcessor = new FinalRequestProcessor(this);
+              commitProcessor = new CommitProcessor(finalProcessor,
+                      Long.toString(getServerId()), true,
+                      getZooKeeperServerListener());
+              commitProcessor.start();
+              firstProcessor = new FollowerRequestProcessor(this, commitProcessor);
+              ((FollowerRequestProcessor) firstProcessor).start();
+              syncProcessor = new SyncRequestProcessor(this,
+                      new SendAckRequestProcessor((Learner)getFollower()));
+              syncProcessor.start();
+          }
+          
+           // ... ...
+      }
+      ```
+
+      
 
 
-# 源码分析
+
+# 源码分析—流程分析
 
 1. Zookeeper 集群通过`org.apache.zookeeper.server.quorum.QuorumPeerMain` 启动，每一个集群中的节点被称为QuorumPeer
 
