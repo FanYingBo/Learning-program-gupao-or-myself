@@ -19,6 +19,13 @@ public interface DistributeLockClient {
      * @return
      */
     String acquireWithBlocked(int times, int delayInterval, int timeOut, TimeUnit timeUnit) throws LockException;
+    /**
+     * @param times 重试次数
+     * @param delayInterval 延时，周期
+     * @param timeOut 超时时间
+     * @return
+     */
+    String acquireWithBlockedSignal(int timeOut, TimeUnit timeUnit) throws LockException;
 
     /**
      * 释放锁

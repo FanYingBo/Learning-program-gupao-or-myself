@@ -41,6 +41,11 @@ public class ZKDistributeLock extends AbstractDistributeLockClient implements Di
     }
 
     @Override
+    public String acquireWithBlockedSignal(int timeOut, TimeUnit timeUnit) throws LockException {
+        return null;
+    }
+
+    @Override
     public boolean releaseLock(String path) {
         return false;
     }
