@@ -197,9 +197,563 @@ public class Stat implements Record {
 
    问题：无法处理leader服务器崩溃退出带来的不一致问题，因此需要崩溃恢复
 
-## Leader选举
 
 
+# 源码分析
+
+1. Zookeeper 集群通过`org.apache.zookeeper.server.quorum.QuorumPeerMain` 启动，每一个集群中的节点被称为QuorumPeer
+
+2. 启动流程：
+
+   ```java
+   //  QuorumPeer 本质是一个线程
+   public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider {
+       // 通信服务工厂
+       // 1. org.apache.zookeeper.server.NIOServerCnxnFactory
+       // 2. org.apache.zookeeper.server.NettyServerCnxnFactory
+       ServerCnxnFactory cnxnFactory;
+    	// ... ...
+    	@Override
+       public synchronized void start() {
+           loadDataBase(); // 加载本地数据
+           cnxnFactory.start(); // 暴露对外服务端口       
+           startLeaderElection(); // Leader 选举
+           super.start(); // 这里执行run()方法
+       }
+       // ... ...
+       @Override
+       public void run() {
+           setName("QuorumPeer" + "[myid=" + getId() + "]" +
+                   cnxnFactory.getLocalAddress());
+   
+           LOG.debug("Starting quorum peer");
+           try {
+               jmxQuorumBean = new QuorumBean(this);
+               MBeanRegistry.getInstance().register(jmxQuorumBean, null);
+               for(QuorumServer s: getView().values()){
+                   ZKMBeanInfo p;
+                   if (getId() == s.id) {
+                       p = jmxLocalPeerBean = new LocalPeerBean(this);
+                       try {
+                           MBeanRegistry.getInstance().register(p, jmxQuorumBean);
+                       } catch (Exception e) {
+                           LOG.warn("Failed to register with JMX", e);
+                           jmxLocalPeerBean = null;
+                       }
+                   } else {
+                       p = new RemotePeerBean(s);
+                       try {
+                           MBeanRegistry.getInstance().register(p, jmxQuorumBean);
+                       } catch (Exception e) {
+                           LOG.warn("Failed to register with JMX", e);
+                       }
+                   }
+               }
+           } catch (Exception e) {
+               LOG.warn("Failed to register with JMX", e);
+               jmxQuorumBean = null;
+           }
+   
+           try {
+               /*
+                * Main loop
+                */
+               while (running) {
+                   switch (getPeerState()) {
+                   case LOOKING:
+                       LOG.info("LOOKING");
+   
+                       if (Boolean.getBoolean("readonlymode.enabled")) {
+                           LOG.info("Attempting to start ReadOnlyZooKeeperServer");
+   
+                           // Create read-only server but don't start it immediately
+                           final ReadOnlyZooKeeperServer roZk = new ReadOnlyZooKeeperServer(
+                                   logFactory, this,
+                                   new ZooKeeperServer.BasicDataTreeBuilder(),
+                                   this.zkDb);
+       
+                           // Instead of starting roZk immediately, wait some grace
+                           // period before we decide we're partitioned.
+                           //
+                           // Thread is used here because otherwise it would require
+                           // changes in each of election strategy classes which is
+                           // unnecessary code coupling.
+                           Thread roZkMgr = new Thread() {
+                               public void run() {
+                                   try {
+                                       // lower-bound grace period to 2 secs
+                                       sleep(Math.max(2000, tickTime));
+                                       if (ServerState.LOOKING.equals(getPeerState())) {
+                                           roZk.startup();
+                                       }
+                                   } catch (InterruptedException e) {
+                                       LOG.info("Interrupted while attempting to start ReadOnlyZooKeeperServer, not started");
+                                   } catch (Exception e) {
+                                       LOG.error("FAILED to start ReadOnlyZooKeeperServer", e);
+                                   }
+                               }
+                           };
+                           try {
+                               roZkMgr.start();
+                               setBCVote(null);
+                               setCurrentVote(makeLEStrategy().lookForLeader());
+                           } catch (Exception e) {
+                               LOG.warn("Unexpected exception",e);
+                               setPeerState(ServerState.LOOKING);
+                           } finally {
+                               // If the thread is in the the grace period, interrupt
+                               // to come out of waiting.
+                               roZkMgr.interrupt();
+                               roZk.shutdown();
+                           }
+                       } else {
+                           try {
+                               setBCVote(null);
+                               setCurrentVote(makeLEStrategy().lookForLeader());
+                           } catch (Exception e) {
+                               LOG.warn("Unexpected exception", e);
+                               setPeerState(ServerState.LOOKING);
+                           }
+                       }
+                       break;
+                   case OBSERVING:
+                       try {
+                           LOG.info("OBSERVING");
+                           setObserver(makeObserver(logFactory));
+                           observer.observeLeader();
+                       } catch (Exception e) {
+                           LOG.warn("Unexpected exception",e );                        
+                       } finally {
+                           observer.shutdown();
+                           setObserver(null);
+                           setPeerState(ServerState.LOOKING);
+                       }
+                       break;
+                   case FOLLOWING:
+                       try {
+                           LOG.info("FOLLOWING");
+                           setFollower(makeFollower(logFactory));
+                           follower.followLeader();
+                       } catch (Exception e) {
+                           LOG.warn("Unexpected exception",e);
+                       } finally {
+                           follower.shutdown();
+                           setFollower(null);
+                           setPeerState(ServerState.LOOKING);
+                       }
+                       break;
+                   case LEADING:
+                       LOG.info("LEADING");
+                       try {
+                           setLeader(makeLeader(logFactory));
+                           leader.lead();
+                           setLeader(null);
+                       } catch (Exception e) {
+                           LOG.warn("Unexpected exception",e);
+                       } finally {
+                           if (leader != null) {
+                               leader.shutdown("Forcing shutdown");
+                               setLeader(null);
+                           }
+                           setPeerState(ServerState.LOOKING);
+                       }
+                       break;
+                   }
+               }
+           } finally {
+               LOG.warn("QuorumPeer main thread exited");
+               try {
+                   MBeanRegistry.getInstance().unregisterAll();
+               } catch (Exception e) {
+                   LOG.warn("Failed to unregister with JMX", e);
+               }
+               jmxQuorumBean = null;
+               jmxLocalPeerBean = null;
+           }
+       } 
+        
+   }
+   ```
+
+   ## Leader 选举
+
+   ```java
+    //  QuorumPeer 本质是一个线程
+   public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider {
+       
+       // leader 选举
+    	synchronized public void startLeaderElection() {
+       	try {
+       		currentVote = new Vote(myid, getLastLoggedZxid(), getCurrentEpoch()); // 1.当前的投票信息
+       	} catch(IOException e) {
+       		RuntimeException re = new RuntimeException(e.getMessage());
+       		re.setStackTrace(e.getStackTrace());
+       		throw re;
+       	}
+           for (QuorumServer p : getView().values()) {
+               if (p.id == myid) {
+                   myQuorumAddr = p.addr;
+                   break;
+               }
+           }
+           if (myQuorumAddr == null) {
+               throw new RuntimeException("My id " + myid + " not in the peer list");
+           }
+           if (electionType == 0) { // 3.4.6版本后不再有
+               try {
+                   udpSocket = new DatagramSocket(myQuorumAddr.getPort());
+                   responder = new ResponderThread();
+                   responder.start();
+               } catch (SocketException e) {
+                   throw new RuntimeException(e);
+               }
+           }
+           this.electionAlg = createElectionAlgorithm(electionType); // 2.创建选举的算法
+       }
+       
+   }
+   ```
+
+   `org.apache.zookeeper.server.quorum.QuorumCnxManager`
+
+   ```java
+   // 管理当前节点向其他节点信息的接收发送
+   public class QuorumCnxManager {
+   // visible for testing
+       public QuorumCnxManager(final long mySid,
+                               Map<Long,QuorumPeer.QuorumServer> view,
+                               QuorumAuthServer authServer,
+                               QuorumAuthLearner authLearner,
+                               int socketTimeout,
+                               boolean listenOnAllIPs,
+                               int quorumCnxnThreadsSize,
+                               boolean quorumSaslAuthEnabled,
+                               ConcurrentHashMap<Long, SendWorker> senderWorkerMap) {
+           this.senderWorkerMap = senderWorkerMap;
+   
+           this.recvQueue = new ArrayBlockingQueue<Message>(RECV_CAPACITY); // 接收队列
+           this.queueSendMap = new ConcurrentHashMap<Long, ArrayBlockingQueue<ByteBuffer>>(); // 向其他节点的发送队列
+           this.lastMessageSent = new ConcurrentHashMap<Long, ByteBuffer>();
+           String cnxToValue = System.getProperty("zookeeper.cnxTimeout");
+           if(cnxToValue != null){
+               this.cnxTO = Integer.parseInt(cnxToValue);
+           }
+   
+           this.mySid = mySid;
+           this.socketTimeout = socketTimeout;
+           this.view = view;
+           this.listenOnAllIPs = listenOnAllIPs;
+   
+           initializeAuth(mySid, authServer, authLearner, quorumCnxnThreadsSize,
+                   quorumSaslAuthEnabled);
+   
+           // Starts listener thread that waits for connection requests 
+           listener = new Listener();
+       }
+   }
+   ```
+
+   
+
+   `org.apache.zookeeper.server.quorum.FastLeaderElection`
+
+   ```java
+   // 快速选举
+   public class FastLeaderElection implements Election {
+   
+   	public FastLeaderElection(QuorumPeer self, QuorumCnxManager manager){
+           this.stop = false;
+           this.manager = manager;
+           starter(self, manager);
+       }
+       
+       LinkedBlockingQueue<ToSend> sendqueue;
+       LinkedBlockingQueue<Notification> recvqueue;
+       
+       private void starter(QuorumPeer self, QuorumCnxManager manager) {
+           this.self = self;
+           proposedLeader = -1;
+           proposedZxid = -1;
+   
+           sendqueue = new LinkedBlockingQueue<ToSend>(); // 发送队列 
+           recvqueue = new LinkedBlockingQueue<Notification>(); // 接收队列
+           this.messenger = new Messenger(manager); // 创建接收线程和发送线程，通过队列实现异步化处理请求
+       }
+       // ... ...
+       // 消息处理
+       protected class Messenger {
+   
+           /**
+            * Receives messages from instance of QuorumCnxManager on
+            * method run(), and processes such messages.
+            */
+   
+           class WorkerReceiver extends ZooKeeperThread {
+               volatile boolean stop;
+               QuorumCnxManager manager;
+   
+               WorkerReceiver(QuorumCnxManager manager) {
+                   super("WorkerReceiver");
+                   this.stop = false;
+                   this.manager = manager;
+               }
+   
+               public void run() {
+   
+                   Message response;
+                   while (!stop) {
+                       // Sleeps on receive
+                       try{
+                           response = manager.pollRecvQueue(3000, TimeUnit.MILLISECONDS);
+                           if(response == null) continue;
+   
+                           /*
+                            * If it is from an observer, respond right away.
+                            * Note that the following predicate assumes that
+                            * if a server is not a follower, then it must be
+                            * an observer. If we ever have any other type of
+                            * learner in the future, we'll have to change the
+                            * way we check for observers.
+                            */
+                           if(!self.getVotingView().containsKey(response.sid)){
+                               Vote current = self.getCurrentVote();
+                               ToSend notmsg = new ToSend(ToSend.mType.notification,
+                                       current.getId(),
+                                       current.getZxid(),
+                                       logicalclock.get(),
+                                       self.getPeerState(),
+                                       response.sid,
+                                       current.getPeerEpoch());
+   
+                               sendqueue.offer(notmsg);
+                           } else {
+                               // Receive new message
+                               if (LOG.isDebugEnabled()) {
+                                   LOG.debug("Receive new notification message. My id = "
+                                           + self.getId());
+                               }
+   
+                               /*
+                                * We check for 28 bytes for backward compatibility
+                                */
+                               if (response.buffer.capacity() < 28) {
+                                   LOG.error("Got a short response: "
+                                           + response.buffer.capacity());
+                                   continue;
+                               }
+                               boolean backCompatibility = (response.buffer.capacity() == 28);
+                               response.buffer.clear();
+   
+                               // Instantiate Notification and set its attributes
+                               Notification n = new Notification();
+                               
+                               // State of peer that sent this message
+                               QuorumPeer.ServerState ackstate = QuorumPeer.ServerState.LOOKING;
+                               switch (response.buffer.getInt()) {
+                               case 0:
+                                   ackstate = QuorumPeer.ServerState.LOOKING;
+                                   break;
+                               case 1:
+                                   ackstate = QuorumPeer.ServerState.FOLLOWING;
+                                   break;
+                               case 2:
+                                   ackstate = QuorumPeer.ServerState.LEADING;
+                                   break;
+                               case 3:
+                                   ackstate = QuorumPeer.ServerState.OBSERVING;
+                                   break;
+                               default:
+                                   continue;
+                               }
+                               
+                               n.leader = response.buffer.getLong();
+                               n.zxid = response.buffer.getLong();
+                               n.electionEpoch = response.buffer.getLong();
+                               n.state = ackstate;
+                               n.sid = response.sid;
+                               if(!backCompatibility){
+                                   n.peerEpoch = response.buffer.getLong();
+                               } else {
+                                   if(LOG.isInfoEnabled()){
+                                       LOG.info("Backward compatibility mode, server id=" + n.sid);
+                                   }
+                                   n.peerEpoch = ZxidUtils.getEpochFromZxid(n.zxid);
+                               }
+   
+                               /*
+                                * Version added in 3.4.6
+                                */
+   
+                               n.version = (response.buffer.remaining() >= 4) ? 
+                                            response.buffer.getInt() : 0x0;
+   
+                               /*
+                                * Print notification info
+                                */
+                               if(LOG.isInfoEnabled()){
+                                   printNotification(n);
+                               }
+   
+                               /*
+                                * If this server is looking, then send proposed leader
+                                */
+   
+                               if(self.getPeerState() == QuorumPeer.ServerState.LOOKING){
+                                   recvqueue.offer(n);
+   
+                                   /*
+                                    * Send a notification back if the peer that sent this
+                                    * message is also looking and its logical clock is
+                                    * lagging behind.
+                                    */
+                                   if((ackstate == QuorumPeer.ServerState.LOOKING)
+                                           && (n.electionEpoch < logicalclock.get())){
+                                       Vote v = getVote();
+                                       ToSend notmsg = new ToSend(ToSend.mType.notification,
+                                               v.getId(),
+                                               v.getZxid(),
+                                               logicalclock.get(),
+                                               self.getPeerState(),
+                                               response.sid,
+                                               v.getPeerEpoch());
+                                       sendqueue.offer(notmsg);
+                                   }
+                               } else {
+                                   /*
+                                    * If this server is not looking, but the one that sent the ack
+                                    * is looking, then send back what it believes to be the leader.
+                                    */
+                                   Vote current = self.getCurrentVote();
+                                   if(ackstate == QuorumPeer.ServerState.LOOKING){
+                                       if(LOG.isDebugEnabled()){
+                                           LOG.debug("Sending new notification. My id =  " +
+                                                   self.getId() + " recipient=" +
+                                                   response.sid + " zxid=0x" +
+                                                   Long.toHexString(current.getZxid()) +
+                                                   " leader=" + current.getId());
+                                       }
+                                       
+                                       ToSend notmsg;
+                                       if(n.version > 0x0) {
+                                           notmsg = new ToSend(
+                                                   ToSend.mType.notification,
+                                                   current.getId(),
+                                                   current.getZxid(),
+                                                   current.getElectionEpoch(),
+                                                   self.getPeerState(),
+                                                   response.sid,
+                                                   current.getPeerEpoch());
+                                           
+                                       } else {
+                                           Vote bcVote = self.getBCVote();
+                                           notmsg = new ToSend(
+                                                   ToSend.mType.notification,
+                                                   bcVote.getId(),
+                                                   bcVote.getZxid(),
+                                                   bcVote.getElectionEpoch(),
+                                                   self.getPeerState(),
+                                                   response.sid,
+                                                   bcVote.getPeerEpoch());
+                                       }
+                                       sendqueue.offer(notmsg);
+                                   }
+                               }
+                           }
+                       } catch (InterruptedException e) {
+                           System.out.println("Interrupted Exception while waiting for new message" +
+                                   e.toString());
+                       }
+                   }
+                   LOG.info("WorkerReceiver is down");
+               }
+           }
+   
+   
+           /**
+            * This worker simply dequeues a message to send and
+            * and queues it on the manager's queue.
+            */
+   
+           class WorkerSender extends ZooKeeperThread {
+               volatile boolean stop;
+               QuorumCnxManager manager;
+   
+               WorkerSender(QuorumCnxManager manager){
+                   super("WorkerSender");
+                   this.stop = false;
+                   this.manager = manager;
+               }
+   
+               public void run() {
+                   while (!stop) {
+                       try {
+                           ToSend m = sendqueue.poll(3000, TimeUnit.MILLISECONDS);
+                           if(m == null) continue;
+   
+                           process(m);
+                       } catch (InterruptedException e) {
+                           break;
+                       }
+                   }
+                   LOG.info("WorkerSender is down");
+               }
+   
+               /**
+                * Called by run() once there is a new message to send.
+                *
+                * @param m     message to send
+                */
+               void process(ToSend m) {
+                   ByteBuffer requestBuffer = buildMsg(m.state.ordinal(), 
+                                                           m.leader,
+                                                           m.zxid, 
+                                                           m.electionEpoch, 
+                                                           m.peerEpoch);
+                   manager.toSend(m.sid, requestBuffer); // 这里通过sid找到对应的发送队列添加进去，若没有则先创建队列和连接，
+               }
+           }
+   
+   
+           WorkerSender ws;
+           WorkerReceiver wr;
+   
+           /**
+            * Constructor of class Messenger.
+            *
+            * @param manager   Connection manager
+            */
+           Messenger(QuorumCnxManager manager) {
+   
+               this.ws = new WorkerSender(manager);
+   
+               Thread t = new Thread(this.ws,
+                       "WorkerSender[myid=" + self.getId() + "]");
+               t.setDaemon(true);
+               t.start();
+   
+               this.wr = new WorkerReceiver(manager);
+   
+               t = new Thread(this.wr,
+                       "WorkerReceiver[myid=" + self.getId() + "]");
+               t.setDaemon(true);
+               t.start();
+           }
+   
+           /**
+            * Stops instances of WorkerSender and WorkerReceiver
+            */
+           void halt(){
+               this.ws.stop = true;
+               this.wr.stop = true;
+           }
+   
+       }
+       
+   }
+   
+   ```
+
+   
 
 # 应用
 
@@ -207,17 +761,16 @@ Leader 选举，分布式锁，注册中心，配置中心
 
 ## 基于Curator的leader选举
 
+`com.gupao.study.zookeeper.curator.leaderselector.LeaderSelectorDemo`
 
+## 基于Curator 的分布式锁实现
 
-## 基于Curator 的分布式错实现
-
-
-
-## 基于Curator 自定义实现的分布式锁案例
-
-`com.gupao.study.zookeeper.distribute.lock.DistributeLockTestDemo`
+1. 自定义实现`com.gupao.study.zookeeper.distribute.lock.DistributeLockTestDemo` 
+2. Curator 自带的分布式锁实现`com.gupao.study.zookeeper.curator.lock.CuratorLockDemo`
 
 原理：
 
-Zookeeper 临时有序节点的使用，通过比较目录节点下的 当前需要获取锁的线程创建的节点是否为最小值，如果为最小值则获取锁成功，执行完成业务程序后删除节点，来释放锁
+1. Zookeeper节点监听机制，监听节点的删除修改事件
+
+2. Zookeeper 临时有序节点的使用，通过比较目录节点下的 当前需要获取锁的线程创建的节点是否为最小值，如果为最小值则获取锁成功，执行完成业务程序后删除节点释放锁。
 
