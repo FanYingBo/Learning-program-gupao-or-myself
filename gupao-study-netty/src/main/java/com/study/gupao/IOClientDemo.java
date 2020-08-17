@@ -5,10 +5,19 @@ import com.study.gupao.io.bio.BioClient;
 import com.study.gupao.io.nio.NioClient;
 import com.study.gupao.netty.protobuf.CustomProtoBufNettyClient;
 import com.study.gupao.netty.protobuf.ProtoBufNettyClient;
+import org.apache.log4j.PropertyConfigurator;
 
 public class IOClientDemo {
     private static StringBorderBuild borderBuild = new StringBorderBuild("^","&");
     private static int thread_count = 20;
+
+    static {
+        try{
+            PropertyConfigurator.configure(ClassLoader.getSystemResourceAsStream("log4j.properties"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
 //        nioClientDemo();
 //        ioClientDemo();

@@ -57,7 +57,7 @@ public abstract class NettyServer extends AbstractIOServer {
 //                .option(ChannelOption.SO_RCVBUF,32 * 1024)
                 //TCP_NODELAY 启用了 证明禁用了Nagle算法，来减小延时。
                 //Nagle算法是为了减少广域网的小分组数目，从而减小网络拥塞的出现
-                .option(ChannelOption.TCP_NODELAY,Boolean.TRUE)
+                .childOption(ChannelOption.TCP_NODELAY,Boolean.TRUE)
                 .channel(NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(handler());

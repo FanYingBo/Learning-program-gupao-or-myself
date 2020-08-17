@@ -2,6 +2,7 @@ package com.study.gupao;
 
 import com.study.gupao.format.StringBorderBuild;
 import com.study.gupao.io.IOServer;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * {@link #createBIOServer() create a BIO server}
@@ -10,6 +11,14 @@ import com.study.gupao.io.IOServer;
 public class IOServerDemo {
 
     private static StringBorderBuild borderBuild = new StringBorderBuild("^","&");
+
+    static{
+        try{
+            PropertyConfigurator.configure(ClassLoader.getSystemResourceAsStream("log4j.properties"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
 //        createNIOServer();
