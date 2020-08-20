@@ -18,6 +18,7 @@
         <module>dubbo-service-provider-second</module>
         <module>dubbo-service-impl</module>
         <module>dubbo-springboot-provider</module>
+        <module>dubbo-spi</module>
     </modules>
 
     <dependencies>
