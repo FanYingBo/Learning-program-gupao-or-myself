@@ -33,6 +33,7 @@
         <module>self-study-jdk</module>
         <module>self-study-apollo</module>
         <module>self-study-tcc-transaction</module>
+        <module>self-study-util</module>
     </modules>
 
     <build>
