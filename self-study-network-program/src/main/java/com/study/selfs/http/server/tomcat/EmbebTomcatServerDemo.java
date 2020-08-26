@@ -4,6 +4,8 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 
+import java.io.File;
+
 public class EmbebTomcatServerDemo {
 
     private static final int DEFAULT_PORT = 8080;
@@ -11,7 +13,7 @@ public class EmbebTomcatServerDemo {
 
     public static void main(String[] args) {
         Tomcat tomcat = new Tomcat();
-
+        tomcat.setBaseDir(new File(".").getAbsolutePath());
         tomcat.setPort(DEFAULT_PORT);
         StandardContext  context = new StandardContext();
 
