@@ -34,6 +34,9 @@
         <module>self-study-apollo</module>
         <module>self-study-tcc-transaction</module>
         <module>self-study-util</module>
+        <module>self-study-seata</module>
+        <module>self-study-saga</module>
+        <module>self-study-jvm</module>
     </modules>
 
     <build>
