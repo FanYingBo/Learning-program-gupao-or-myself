@@ -1,4 +1,4 @@
-package com.study.selfs.test;
+package com.study.selfs.jvm;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -7,7 +7,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 死锁分析
  * 死锁，与死锁检查
+ * 分析：死锁的过程发生了什么？
  */
 public class DeadLockDemo {
 
@@ -35,8 +37,7 @@ public class DeadLockDemo {
                     for(long threadId : deadlockedThreads){
                         ThreadInfo threadInfo = threadMXBean.getThreadInfo(threadId);
                         // 这里是获取现在阻塞时候，锁等待的对象
-                        System.out.println("当前线程ID："+threadInfo.getThreadId()+" lock:"+threadInfo.getLockInfo());
-                        System.out.println("锁的拥有者："+threadInfo.getLockOwnerId());
+                        System.out.println("当前线程ID："+threadInfo.getThreadId()+" lock:"+threadInfo.getLockInfo()+"，锁的拥有者："+threadInfo.getLockOwnerId());
                     }
                 }
                 try {
