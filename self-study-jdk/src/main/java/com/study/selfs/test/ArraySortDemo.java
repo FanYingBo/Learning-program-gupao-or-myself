@@ -28,12 +28,12 @@ import java.util.Arrays;
 public class ArraySortDemo {
     public static void main(String[] args) {
 //        int[] arr = {41,25,71,82,24,63,42,21,32,45,67,56,34,29,46,90,81,78,87,235,88,86,112,345,221,331,873,27,345,20,83,291};
-        int[] arr = {0,21,44,23,13,19,15,25,63,9};
+        int[] arr = {31,21,44,23,13,19,15,25,63,9};
         long start = System.nanoTime();
 //        countSorting();
-//        quickSort(arr,0,arr.length-1);
+        quickSort(arr,0,arr.length-1);
 //        insertSort(arr);
-        mergerSort(arr,0,arr.length-1);
+//        mergerSort(arr,0,arr.length-1);
         System.out.println("耗时："+(System.nanoTime()-start));
         System.out.println(Arrays.toString(arr));
     }
@@ -101,6 +101,7 @@ public class ArraySortDemo {
             array[hi] = array[lo];
         }
         array[hi] = key;
+        System.out.println("hi: "+hi+" partition: " + Arrays.toString(array));
         return hi;
     }
 

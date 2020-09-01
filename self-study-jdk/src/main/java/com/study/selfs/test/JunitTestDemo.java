@@ -2,7 +2,7 @@ package com.study.selfs.test;
 
 import org.junit.*;
 
-public class JuniTestDemo{
+public class JunitTestDemo{
 
     @Before
     public void before(){
