@@ -8,6 +8,10 @@
 
 ​		如果学习了汇编语言，会觉得，应用技术其实都一样，一直奉行的是CPU指令操作的基本理念。
 
+[官方文档JDK8地址](https://docs.oracle.com/javase/8/)
+
+
+
 ## 方法调用
 
 ​		方法是程序执行的基本单元，又被成为函数，计算机要支持方法调用的原子指令。在Java中的原子指令是字节码，Java 方法是对字节码的封装，因此JVM必须支持对方法的调用。
@@ -262,7 +266,110 @@ Found 1 deadlock.
 
 ### Jmap
 
-### 
+
+
+### Jinfo
+
+Usage:
+    jinfo [option] <pid>
+        (to connect to running process)
+    jinfo [option] <executable <core>
+        (to connect to a core file)
+    jinfo [option] [server_id@]<remote server IP or hostname>
+        (to connect to remote debug server)
+
+where <option> is one of:
+    -flag <name>         to print the value of the named VM flag  查看VM 参数
+    -flag [+|-]<name>    to enable or disable the named VM flag
+    -flag <name>=<value> to set the named VM flag to the given value
+    -flags               to print VM flags
+    -sysprops            to print Java system properties 打印Java 进程的参数
+    <no option>          to print both of the above
+    -h | -help           to print this help message
+
+```
+[root@localhost ~]# jps
+12041 Jps
+6813 QuorumPeerMain
+// 打印zookeeper的参数信息
+[root@localhost ~]# jinfo 6813
+Attaching to process ID 6813, please wait...
+Debugger attached successfully.
+Server compiler detected.
+JVM version is 25.144-b01
+Java System Properties:
+
+java.runtime.name = Java(TM) SE Runtime Environment
+java.vm.version = 25.144-b01
+sun.boot.library.path = /usr/java/jdk1.8.0_144/jre/lib/amd64
+jdk.tls.rejectClientInitiatedRenegotiation = true
+zookeeper.root.logger = INFO,CONSOLE
+java.vendor.url = http://java.oracle.com/
+java.vm.vendor = Oracle Corporation
+com.sun.management.jmxremote.local.only = false
+path.separator = :
+java.rmi.server.randomIDs = true
+file.encoding.pkg = sun.io
+java.vm.name = Java HotSpot(TM) 64-Bit Server VM
+sun.os.patch.level = unknown
+sun.java.launcher = SUN_STANDARD
+user.country = US
+user.dir = /
+java.vm.specification.name = Java Virtual Machine Specification
+java.runtime.version = 1.8.0_144-b01
+java.awt.graphicsenv = sun.awt.X11GraphicsEnvironment
+os.arch = amd64
+java.endorsed.dirs = /usr/java/jdk1.8.0_144/jre/lib/endorsed
+zookeeper.log.dir = /home/zookeeper-3.6.1/bin/../logs
+zookeeper.admin.serverPort = 10010
+line.separator = 
+
+java.io.tmpdir = /tmp
+java.vm.specification.vendor = Oracle Corporation
+os.name = Linux
+sun.jnu.encoding = ANSI_X3.4-1968
+jetty.git.hash = 363d5f2df3a8a28de40604320230664b9c793c16
+java.library.path = /usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib
+java.specification.name = Java Platform API Specification
+java.class.version = 52.0
+sun.management.compiler = HotSpot 64-Bit Tiered Compilers
+os.version = 3.10.0-514.el7.x86_64
+user.home = /root
+user.timezone = Asia/Shanghai
+java.awt.printerjob = sun.print.PSPrinterJob
+file.encoding = ANSI_X3.4-1968
+java.specification.version = 1.8
+user.name = root
+java.class.path = /home/zookeeper-3.6.1/bin/../zookeeper-server/target/classes:/home/zookeeper-3.6.1/bin/../build/classes:/home/zookeeper-3.6.1/bin/../zookeeper-server/target/lib/*.jar:/home/zookeeper-3.6.1/bin/../build/lib/*.jar:/home/zookeeper-3.6.1/bin/../lib/zookeeper-prometheus-metrics-3.6.1.jar:/home/zookeeper-3.6.1/bin/../lib/zookeeper-jute-3.6.1.jar:/home/zookeeper-3.6.1/bin/../lib/zookeeper-3.6.1.jar:/home/zookeeper-3.6.1/bin/../lib/snappy-java-1.1.7.jar:/home/zookeeper-3.6.1/bin/../lib/slf4j-log4j12-1.7.25.jar:/home/zookeeper-3.6.1/bin/../lib/slf4j-api-1.7.25.jar:/home/zookeeper-3.6.1/bin/../lib/simpleclient_servlet-0.6.0.jar:/home/zookeeper-3.6.1/bin/../lib/simpleclient_hotspot-0.6.0.jar:/home/zookeeper-3.6.1/bin/../lib/simpleclient_common-0.6.0.jar:/home/zookeeper-3.6.1/bin/../lib/simpleclient-0.6.0.jar:/home/zookeeper-3.6.1/bin/../lib/netty-transport-native-unix-common-4.1.48.Final.jar:/home/zookeeper-3.6.1/bin/../lib/netty-transport-native-epoll-4.1.48.Final.jar:/home/zookeeper-3.6.1/bin/../lib/netty-transport-4.1.48.Final.jar:/home/zookeeper-3.6.1/bin/../lib/netty-resolver-4.1.48.Final.jar:/home/zookeeper-3.6.1/bin/../lib/netty-handler-4.1.48.Final.jar:/home/zookeeper-3.6.1/bin/../lib/netty-common-4.1.48.Final.jar:/home/zookeeper-3.6.1/bin/../lib/netty-codec-4.1.48.Final.jar:/home/zookeeper-3.6.1/bin/../lib/netty-buffer-4.1.48.Final.jar:/home/zookeeper-3.6.1/bin/../lib/metrics-core-3.2.5.jar:/home/zookeeper-3.6.1/bin/../lib/log4j-1.2.17.jar:/home/zookeeper-3.6.1/bin/../lib/json-simple-1.1.1.jar:/home/zookeeper-3.6.1/bin/../lib/jline-2.11.jar:/home/zookeeper-3.6.1/bin/../lib/jetty-util-9.4.24.v20191120.jar:/home/zookeeper-3.6.1/bin/../lib/jetty-servlet-9.4.24.v20191120.jar:/home/zookeeper-3.6.1/bin/../lib/jetty-server-9.4.24.v20191120.jar:/home/zookeeper-3.6.1/bin/../lib/jetty-security-9.4.24.v20191120.jar:/home/zookeeper-3.6.1/bin/../lib/jetty-io-9.4.24.v20191120.jar:/home/zookeeper-3.6.1/bin/../lib/jetty-http-9.4.24.v20191120.jar:/home/zookeeper-3.6.1/bin/../lib/javax.servlet-api-3.1.0.jar:/home/zookeeper-3.6.1/bin/../lib/jackson-databind-2.10.3.jar:/home/zookeeper-3.6.1/bin/../lib/jackson-core-2.10.3.jar:/home/zookeeper-3.6.1/bin/../lib/jackson-annotations-2.10.3.jar:/home/zookeeper-3.6.1/bin/../lib/commons-lang-2.6.jar:/home/zookeeper-3.6.1/bin/../lib/commons-cli-1.2.jar:/home/zookeeper-3.6.1/bin/../lib/audience-annotations-0.5.0.jar:/home/zookeeper-3.6.1/bin/../zookeeper-*.jar:/home/zookeeper-3.6.1/bin/../zookeeper-server/src/main/resources/lib/*.jar:/home/zookeeper-3.6.1/bin/../conf:
+com.sun.management.jmxremote = 
+java.vm.specification.version = 1.8
+sun.arch.data.model = 64
+sun.java.command = org.apache.zookeeper.server.quorum.QuorumPeerMain /home/zookeeper-3.6.1/bin/../conf/zoo.cfg
+java.home = /usr/java/jdk1.8.0_144/jre
+user.language = en
+zookeeper.server.3 = 192.168.8.158:2888:3888
+java.specification.vendor = Oracle Corporation
+zookeeper.server.2 = 192.168.8.157:2888:3888
+zookeeper.server.1 = 192.168.8.156:2888:3888
+awt.toolkit = sun.awt.X11.XToolkit
+java.vm.info = mixed mode
+java.version = 1.8.0_144
+java.ext.dirs = /usr/java/jdk1.8.0_144/jre/lib/ext:/usr/java/packages/lib/ext
+sun.boot.class.path = /usr/java/jdk1.8.0_144/jre/lib/resources.jar:/usr/java/jdk1.8.0_144/jre/lib/rt.jar:/usr/java/jdk1.8.0_144/jre/lib/sunrsasign.jar:/usr/java/jdk1.8.0_144/jre/lib/jsse.jar:/usr/java/jdk1.8.0_144/jre/lib/jce.jar:/usr/java/jdk1.8.0_144/jre/lib/charsets.jar:/usr/java/jdk1.8.0_144/jre/lib/jfr.jar:/usr/java/jdk1.8.0_144/jre/classes
+java.vendor = Oracle Corporation
+file.separator = /
+java.vendor.url.bug = http://bugreport.sun.com/bugreport/
+sun.io.unicode.encoding = UnicodeLittle
+sun.cpu.endian = little
+zookeeper.log.file = zookeeper--server-localhost.localdomain.log
+sun.cpu.isalist = 
+
+VM Flags:
+Non-default VM flags: -XX:CICompilerCount=4 -XX:+HeapDumpOnOutOfMemoryError -XX:InitialHeapSize=31457280 -XX:+ManagementServer -XX:MaxHeapSize=1048576000 -XX:MaxNewSize=349175808 -XX:MinHeapDeltaBytes=524288 -XX:NewSize=10485760 -XX:OldSize=20971520 -XX:OnOutOfMemoryError=null -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseFastUnorderedTimeStamps -XX:+UseParallelGC 
+Command line:  -Dzookeeper.log.dir=/home/zookeeper-3.6.1/bin/../logs -Dzookeeper.log.file=zookeeper--server-localhost.localdomain.log -Dzookeeper.root.logger=INFO,CONSOLE -XX:+HeapDumpOnOutOfMemoryError -XX:OnOutOfMemoryError=kill -9 %p -Xmx1000m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false
+```
+
+
 
 ### Jstat
 
@@ -277,6 +384,8 @@ Found 1 deadlock.
 
 
 # 垃圾回收（Garbage Collect）
+
+[垃圾回收官方介绍](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/)
 
 ### 内存区域的分配
 
@@ -303,6 +412,18 @@ Found 1 deadlock.
   
 
 ### 垃圾收集器
+
+#### 说明：
+
+如何度量垃圾回收的性能：
+
+* 吞吐量是考虑长时间内未花费在垃圾收集上的总时间的百分比。吞吐量包括分配所花费的时间(但通常不需要调优分配速度)。
+
+  垃圾回收时间百分比 = 垃圾回收时间 /（垃圾回收时间+系统运行时间）
+
+* 暂停时间是应用程序由于垃圾收集正在发生而出现无响应的时间。
+
+####  简介：
 
 1. 串行收集器使用一个线程来执行所有的垃圾收集工作，这使得它相对高效，因为线程之间没有通信开销。它最适合于单处理器机器，因为它不能利用多处理器硬件的优势，尽管它在多处理器上对于具有小数据集(最多约100 MB)的应用程序很有用。在某些硬件和操作系统配置上，串行收集器是默认选择的，或者可以通过选项-XX:+UseSerialGC显式启用
 
@@ -359,3 +480,7 @@ Found 1 deadlock.
 
 
 
+## JVM参数
+
+* -XX:+UnlockExperimentalVMOptions
+* -XX:+UseCGroupMemoryLimitForHeap

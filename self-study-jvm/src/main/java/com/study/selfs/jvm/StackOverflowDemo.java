@@ -9,8 +9,8 @@ package com.study.selfs.jvm;
 public class StackOverflowDemo {
 
     public static void main(String[] args) {
-        new TestMethod().sum(2);
-//        new TestMemory().allocate();
+//        new TestMethod().sum(2);
+        new TestMemory().allocate();
     }
 }
 
@@ -32,6 +32,7 @@ class TestMethod{
 
 /**
  * 场景二：
+ * 关于栈上分配与逃逸分析
  * 这里能否栈溢出呢？
  * {@link java.lang.OutOfMemoryError}
  * JVM opt: -Xmx10M
