@@ -420,6 +420,7 @@ Command line:  -Dzookeeper.log.dir=/home/zookeeper-3.6.1/bin/../logs -Dzookeeper
 * 吞吐量是考虑长时间内未花费在垃圾收集上的总时间的百分比。吞吐量包括分配所花费的时间(但通常不需要调优分配速度)。
 
   垃圾回收时间百分比 = 垃圾回收时间 /（垃圾回收时间+系统运行时间）
+  吞吐量 = 系统运行时间
 
 * 暂停时间是应用程序由于垃圾收集正在发生而出现无响应的时间。
 
@@ -481,6 +482,16 @@ Command line:  -Dzookeeper.log.dir=/home/zookeeper-3.6.1/bin/../logs -Dzookeeper
 
 
 ## JVM参数
+内存溢出时打印堆栈信息：
+* -XX:+HeapDumpOnOutOfMemoryError
+* -XX:HeapDumpPath=/home/liuke/jvmlogs/
+打印（STW）时间
+* -XX:PrintGCApplicationStoppedTime
 
 * -XX:+UnlockExperimentalVMOptions
 * -XX:+UseCGroupMemoryLimitForHeap
+
+* -XX:ParallelGCThreads  指定ParNew GC线程的数量，默认与CPU核数相同
+
+* -XX:+CMSPermGenSweepingEnabled
+* -XX:+CMSClassUnloadingEnabled
