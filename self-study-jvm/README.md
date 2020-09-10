@@ -482,16 +482,32 @@ Command line:  -Dzookeeper.log.dir=/home/zookeeper-3.6.1/bin/../logs -Dzookeeper
 
 
 ## JVM参数
-内存溢出时打印堆栈信息：
-* -XX:+HeapDumpOnOutOfMemoryError
-* -XX:HeapDumpPath=/home/liuke/jvmlogs/
-打印（STW）时间
-* -XX:PrintGCApplicationStoppedTime
+ 1. 内存溢出时打印堆栈信息：
+
+    -XX:+HeapDumpOnOutOfMemoryError
+
+    -XX:HeapDumpPath=/home/liuke/jvmlogs/dump-${serverid}.log
+
+    IBM heapanalyzer： https://public.dhe.ibm.com/software/websphere/appserv/support/tools/HeapAnalyzer/ha457.jar
+
+    [分析案例](https://github.com/FanYingBo/Learning-program-gupao-or-myself/blob/master/self-study-jvm/HeapAnalyzer.png)
+
+	2. 打印（STW）时间
+
+    -XX:PrintGCApplicationStoppedTime
+
+3. 
 
 * -XX:+UnlockExperimentalVMOptions
+
 * -XX:+UseCGroupMemoryLimitForHeap
 
-* -XX:ParallelGCThreads  指定ParNew GC线程的数量，默认与CPU核数相同
+  
+
+   指定ParNew GC线程的数量，默认与CPU核数相同
+
+* -XX:ParallelGCThreads 
 
 * -XX:+CMSPermGenSweepingEnabled
+
 * -XX:+CMSClassUnloadingEnabled
