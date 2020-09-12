@@ -1,10 +1,15 @@
 package com.study.self.interview.difficulties;
 
-import java.io.File;
-
+/**
+ * 大文件查找
+ */
 public class TestQueryLink {
     public static void main(String[] args) {
-        File file = new File("D:\\batch\\address.txt");
-        System.out.println(file.length());
+
+        InternetLinkFileQuery internetLinkFileQuery = new InternetLinkFileQuery("D:\\batch\\address.txt","www.vuxubhq.com");
+
+        internetLinkFileQuery.init();
+
+        internetLinkFileQuery.waitAllThreadComplete();
     }
 }
