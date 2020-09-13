@@ -1,4 +1,4 @@
-package com.study.self.interview.difficulties;
+package com.study.self.interview.difficulties.filequery;
 
 import java.io.*;
 import java.util.Random;
@@ -10,15 +10,17 @@ public class GenerateFile {
         if(!file.exists()){
             file.mkdirs();
         }
-        file = new File("D:\\batch\\address.txt");
+        file = new File("D:\\batch\\address3.txt");
         try {
             FileOutputStream fos = new FileOutputStream(file,true);
-            int count = 1000000;
+            int count = 10000000;
             for(int i = 0; i< count;i++){
                 Random random = new Random();
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("www.").append((char)(97+random.nextInt(25)))
+                        .append((char)(97+random.nextInt(25)))
+                        .append((char)(97+random.nextInt(25)))
                         .append((char)(97+random.nextInt(25)))
                         .append((char)(97+random.nextInt(25)))
                         .append((char)(97+random.nextInt(25)))

@@ -1,4 +1,4 @@
-package com.study.self.interview.difficulties;
+package com.study.self.interview.difficulties.filequery;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

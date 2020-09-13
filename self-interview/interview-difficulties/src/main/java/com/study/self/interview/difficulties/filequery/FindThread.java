@@ -1,4 +1,4 @@
-package com.study.self.interview.difficulties;
+package com.study.self.interview.difficulties.filequery;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -70,12 +70,28 @@ public class FindThread implements Runnable{
             }
             if(strBuffer.indexOf(internetLinkFileQuery.getQueryStr()) >= 0){
                 internetLinkFileQuery.setResult();
+                stop();
             }
             markThreadSize();
-            internetLinkFileQuery.remove(this.runId);
+            removeThis();
+            checkIfStop();
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void checkIfStop(){
+        if(this.threadEndPosition >= this.internetLinkFileQuery.getFileSize()){
+            stop();
+        }
+    }
+
+    private void stop(){
+        this.internetLinkFileQuery.stop();
+    }
+
+    private void removeThis(){
+        internetLinkFileQuery.remove(this.runId);
     }
 
     public void markThreadSize(){

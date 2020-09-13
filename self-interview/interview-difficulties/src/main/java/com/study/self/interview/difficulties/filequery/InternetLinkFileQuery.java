@@ -1,4 +1,4 @@
-package com.study.self.interview.difficulties;
+package com.study.self.interview.difficulties.filequery;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -46,6 +46,8 @@ public class InternetLinkFileQuery {
 
     private int threadId = 0;
 
+    private int processors;
+
     private Lock lock = new ReentrantLock();
 
     public  InternetLinkFileQuery(String filePath,String queryStr){
@@ -58,6 +60,7 @@ public class InternetLinkFileQuery {
         check();
         this.resultReference = new AtomicReference<>();
         this.runnables = new LinkedHashMap<>();
+        this.processors = Runtime.getRuntime().availableProcessors();
         try {
             this.file = new RandomAccessFile(this.filePath,"rw");
             this.fileSize = file.getChannel().size();
@@ -78,7 +81,9 @@ public class InternetLinkFileQuery {
 
 
     private void evaluate() {
-        this.threadCount = Runtime.getRuntime().availableProcessors();
+        if(this.threadCount > this.processors || this.threadCount == 0){
+            setThreadCount(this.processors);
+        }
         this.everyThreadMemory = (long)(Runtime.getRuntime().freeMemory() * 0.6 / this.threadCount) / 2;
         this.runSize = fileSize / everyThreadMemory +1;
     }
@@ -138,27 +143,36 @@ public class InternetLinkFileQuery {
         }
     }
 
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public int getThreadCount() {
+        return threadCount;
+    }
+
+    public void setThreadCount(int threadCount) {
+        this.threadCount = threadCount;
+
+    }
+
     public void waitAllThreadComplete(){
         while(!isStop()){
-            if(resultReference.get() != null && queryStr.equals(resultReference.get())){
-                stop();
-                System.out.println("找到结果，"+ resultReference.get());
-                System.out.println("runSize: "+ runSize);
-                System.out.println("fileSize: "+ fileSize);
-                System.out.println("totalSize: "+ totalSize.sum());
-                System.out.println("lastPosition: "+lastEndPosition);
-                break;
+            if(runnables.size() < this.threadCount && !isEndFile()){
+                FindThread runnable = cutFile();
+                put(runnable.getRunId(),runnable);
+                new Thread(runnable).start();
             }
-            try{
-                lock.lock();
-                if(runnables.size() < this.threadCount && !isEndFile()){
-                    FindThread runnable = cutFile();
-                    put(runnable.getRunId(),runnable);
-                    new Thread(runnable).start();
-                }
-            }finally {
-                lock.unlock();
-            }
+        }
+        if(resultReference.get() != null && queryStr.equals(resultReference.get())){
+            System.out.println("找到结果，"+ resultReference.get());
+            System.out.println("runSize: "+ runSize);
+            System.out.println("threadCount: "+ threadCount);
+            System.out.println("fileSize: "+ fileSize);
+            System.out.println("totalSize: "+ totalSize.sum());
+            System.out.println("lastPosition: "+lastEndPosition);
+        }else{
+            System.out.println("未找到结果");
         }
     }
 }
