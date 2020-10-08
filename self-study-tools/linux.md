@@ -19,3 +19,15 @@ Changing password for user tommy.
 New UNIX password:     //在这里输入新密码
 Retype new UNIX password:  //再次输入新密码
 passwd: all authentication tokens updated successfully.
+
+# yum 命令
+
+yum install 在线安装数据源
+
+yum -y install yum-utils 下载 yum-utils
+
+yumdownloader 下载数据源到本地
+
+yum-complete-transaction 更新失败时，对进行的事务擦除
+
+yum update 升级更新所有软件包

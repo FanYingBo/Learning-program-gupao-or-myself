@@ -65,9 +65,19 @@ git branch -d (branchname)
 
 合并分支：
 
+* merge
+
 ```
 git merge
 ```
+
+* rebase
+
+```
+git rebase
+```
+
+
 
 分支冲突：
 
