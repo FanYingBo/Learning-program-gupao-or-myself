@@ -27,7 +27,7 @@
         </plugins>
     </build>
     <properties>
-        <springboot.ver>2.1.5.RELEASE</springboot.ver>
+        <springboot.ver>2.2.11.RELEASE</springboot.ver>
     </properties>
     <dependencies>
         <dependency>
