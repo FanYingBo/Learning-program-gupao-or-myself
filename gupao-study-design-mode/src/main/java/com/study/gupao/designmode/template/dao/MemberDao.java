@@ -18,17 +18,22 @@ public class MemberDao {
 
     public List<?> query(){
         String sql ="select * from member";
-        List<?> objects = jdbcTemplate.excuteQuery(sql, new RowMapper<Member>() {
-            @Override
-            public Member mapRow(ResultSet resultSet, int row) throws SQLException {
-                Member member = new Member();
-                member.setUsername(resultSet.getString("username"));
-                member.setPassword(resultSet.getString("password"));
-                member.setAddr(resultSet.getString("addr"));
-                member.setAge(resultSet.getInt("age"));
-                return member;
-            }
-        }, null);
+        List<?> objects = null;
+        try {
+            objects = jdbcTemplate.excuteQuery(sql, new RowMapper<Member>() {
+                @Override
+                public Member mapRow(ResultSet resultSet, int row) throws SQLException {
+                    Member member = new Member();
+                    member.setUsername(resultSet.getString("username"));
+                    member.setPassword(resultSet.getString("password"));
+                    member.setAddr(resultSet.getString("addr"));
+                    member.setAge(resultSet.getInt("age"));
+                    return member;
+                }
+            }, null);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return objects;
     }
 //    public Object processResult(ResultSet resultSet) throws Exception {
