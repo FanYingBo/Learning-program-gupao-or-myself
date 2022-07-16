@@ -58,21 +58,22 @@ public class JDBCTemplate {
          }
          return dataList;
      }
-     public List<?> excuteQuery(String sql, RowMapper<?> rowMapper, Object[] values){
+     public List<?> excuteQuery(String sql, RowMapper<?> rowMapper, Object[] values) throws SQLException {
+         Connection connection = null;
+         PreparedStatement preparedStatement = null;
          //1.获取连接
          try {
-             Connection connection = this.getConnection();
-
-             PreparedStatement preparedStatement = this.getPreparedStatement(connection,sql);
+             connection = this.getConnection();
+             preparedStatement = this.getPreparedStatement(connection,sql);
 
              ResultSet resultSet = this.getResultSet(preparedStatement);
              List<?> results = processResult(resultSet,rowMapper,values);
-             this.closeResult(resultSet);
-             this.closePreparedStatement(preparedStatement);
-             this.closeConnection(connection);
              return results;
          } catch (Exception e) {
              e.printStackTrace();
+         }finally {
+             this.closePreparedStatement(preparedStatement);
+             this.closeConnection(connection);
          }
          return null;
      }

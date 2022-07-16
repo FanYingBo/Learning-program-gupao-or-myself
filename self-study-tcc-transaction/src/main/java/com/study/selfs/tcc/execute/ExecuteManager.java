@@ -31,9 +31,9 @@ public class ExecuteManager {
 
     private void initialize() {
         orderService = new OrderService();
-        orderService.setNext(new InventoryService())
-                    .setNext(new CreditService())
-                    .setNext(new NoticeDeliveryService());
+//        orderService.setNext(new InventoryService())
+//                    .setNext(new CreditService())
+//                    .setNext(new NoticeDeliveryService());
     }
 
     private ExecutorService executor = new ThreadPoolExecutor(minProcessors,maxProcessors,0l, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(),new DefaultThreadFactory(),new ThreadPoolExecutor.CallerRunsPolicy());
