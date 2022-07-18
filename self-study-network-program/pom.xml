@@ -11,7 +11,7 @@
 
     <artifactId>self-study-networkprogram</artifactId>
     <properties>
-        <tomcat.ver>8.5.55</tomcat.ver>
+        <tomcat.ver>10.0.4</tomcat.ver>
     </properties>
     <dependencies>
         <dependency>
