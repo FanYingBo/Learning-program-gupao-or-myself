@@ -1,13 +1,13 @@
 package com.study.mybatis;
 
-import com.study.dubbo.mybatis.dao.CustomOrderDao;
-import com.study.dubbo.mybatis.dao.NormalCustomDao;
-import com.study.dubbo.mybatis.dao.ProductInfoDao;
-import com.study.dubbo.mybatis.dao.UserDao;
-import com.study.dubbo.mybatis.entity.CustomOrder;
-import com.study.dubbo.mybatis.entity.NormalCustom;
-import com.study.dubbo.mybatis.entity.ProductInfo;
-import com.study.dubbo.mybatis.entity.User;
+import com.study.gupao.mybatis.dao.CustomOrderDao;
+import com.study.gupao.mybatis.dao.NormalCustomDao;
+import com.study.gupao.mybatis.dao.ProductInfoDao;
+import com.study.gupao.mybatis.dao.UserDao;
+import com.study.gupao.mybatis.entity.CustomOrder;
+import com.study.gupao.mybatis.entity.NormalCustom;
+import com.study.gupao.mybatis.entity.ProductInfo;
+import com.study.gupao.mybatis.entity.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;

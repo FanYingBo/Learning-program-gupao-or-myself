@@ -1,8 +1,8 @@
 package com.study.mybatis;
 
-import com.study.dubbo.mybatis.entity.NormalCustom;
-import com.study.dubbo.mybatis.mapper.NormalCustomMapper;
-import com.study.dubbo.mybatis.util.session.SessionUtils;
+import com.study.gupao.mybatis.entity.NormalCustom;
+import com.study.gupao.mybatis.mapper.NormalCustomMapper;
+import com.study.gupao.mybatis.util.session.SessionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.io.Resources;

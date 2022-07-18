@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>selfs-study-google-guava</artifactId>
+    <artifactId>self-study-google-guava</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>

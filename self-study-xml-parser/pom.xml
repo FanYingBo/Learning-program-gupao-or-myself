@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>selfs-study-xml-parser</artifactId>
+    <artifactId>self-study-xml-parser</artifactId>
     <properties>
         <spring.ver>5.2.8.RELEASE</spring.ver>
     </properties>

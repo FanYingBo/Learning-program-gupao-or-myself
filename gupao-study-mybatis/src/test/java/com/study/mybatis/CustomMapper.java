@@ -1,6 +1,6 @@
 package com.study.mybatis;
 
-import com.study.dubbo.mybatis.entity.Customer;
+import com.study.gupao.mybatis.entity.Customer;
 
 public interface CustomMapper extends BaseMapper<Customer,String>{
 

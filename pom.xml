@@ -26,17 +26,18 @@
         <module>gupao-study-elasticsearch</module>
         <module>gupao-study-mycat</module>
         <module>gupao-study-rabbitmq</module>
-        <module>self-study-shardingsphere</module>
+        <module>self-study-sharding-sphere</module>
 		<module>gupao-study-redis</module>
         <module>self-study-google-guava</module>
         <module>self-study-quartz</module>
         <module>self-study-jdk</module>
         <module>self-study-apollo</module>
-        <module>self-study-tcc-transaction</module>
+        <module>self-study-tcc-transcation</module>
         <module>self-study-util</module>
         <module>self-study-seata</module>
         <module>self-study-saga</module>
         <module>self-study-jvm</module>
+        <module>self-interview</module>
     </modules>
 
     <build>
