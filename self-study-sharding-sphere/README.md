@@ -58,5 +58,8 @@ ShardingSphere是一套开源的分布式数据库中间件解决方案组成的
         * 执行引擎
         * 归并引擎
 ### 读写分离
+
 ### 数据治理
 ### 分布式事务
+### 参考实例
+* 分片 [SpringBoot + ShardingJdbc+Mybatis](https://github.com/FanYingBo/spring-boot-bucket/tree/master/study-spring-boot/spring-boot-shard-jdbc)
