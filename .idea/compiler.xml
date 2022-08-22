@@ -1,33 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="USE_RELEASE_OPTION" value="false" />
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="gupao-study-activemq" />
-        <module name="gupao-study-design-mode" />
-        <module name="gupao-study-dubbo" />
-        <module name="gupao-study-elasticsearch" />
-        <module name="gupao-study-jdk" />
+        <module name="self-study-seata" />
+        <module name="dubbo-service-api" />
         <module name="gupao-study-kafka" />
-        <module name="gupao-study-mongodb" />
-        <module name="gupao-study-mybatis" />
-        <module name="gupao-study-mycat" />
-        <module name="gupao-study-netty" />
-        <module name="gupao-study-rabbitmq" />
-        <module name="gupao-study-sharding-sphere" />
         <module name="gupao-study-springboot" />
-        <module name="gupao-study-springcloud" />
+        <module name="gupao-study-mongodb" />
+        <module name="gupao-study-design-mode" />
+        <module name="self-study-rocketmq" />
+        <module name="dubbo-service-consumer" />
+        <module name="self-study-saga" />
+        <module name="dubbo-service-provider" />
+        <module name="self-study-jdk" />
+        <module name="dubbo-springboot-provider" />
         <module name="gupao-study-springframework" />
-        <module name="gupao-study-zookeeper" />
-        <module name="gupaostudyactivemq" />
         <module name="self-study-networkprogram" />
-        <module name="selfs-study-xml-parser" />
+        <module name="gupao-study-mycat" />
+        <module name="self-study-apollo" />
+        <module name="self-study-quartz" />
+        <module name="gupao-study-activemq" />
+        <module name="self-study-tcc-transcation" />
+        <module name="dubbo-spi" />
+        <module name="gupao-study-rabbitmq" />
+        <module name="gupaostudyactivemq" />
+        <module name="self-study-jvm" />
+        <module name="self-study-google-guava" />
+        <module name="gupao-study-netty" />
+        <module name="self-study-util" />
+        <module name="dubbo-service-impl" />
+        <module name="gupao-study-mybatis" />
+        <module name="self-study-xml-parser" />
+        <module name="interview-difficulties" />
+        <module name="gupao-study-zookeeper" />
+        <module name="dubbo-service-provider-second" />
+        <module name="gupao-study-elasticsearch" />
+        <module name="gupao-study-redis" />
+        <module name="gupao-study-springcloud" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
+    <bytecodeTargetLevel target="8">
+      <module name="dubbo-service-api" target="1.8" />
+      <module name="dubbo-service-consumer" target="8" />
+      <module name="dubbo-service-impl" target="1.8" />
+      <module name="dubbo-service-provider" target="1.8" />
+      <module name="dubbo-service-provider-second" target="1.8" />
+      <module name="dubbo-spi" target="1.8" />
+      <module name="dubbo-springboot-provider" target="1.8" />
+      <module name="gupao-study" target="1.8" />
       <module name="gupao-study-activemq" target="1.8" />
       <module name="gupao-study-design-mode" target="1.8" />
       <module name="gupao-study-dubbo" target="1.8" />
@@ -39,16 +65,30 @@
       <module name="gupao-study-mycat" target="1.8" />
       <module name="gupao-study-netty" target="1.8" />
       <module name="gupao-study-rabbitmq" target="1.8" />
-      <module name="gupao-study-sharding-sphere" target="1.8" />
+      <module name="gupao-study-redis" target="1.8" />
       <module name="gupao-study-springboot" target="1.8" />
       <module name="gupao-study-springcloud" target="1.8" />
       <module name="gupao-study-springframework" target="1.8" />
       <module name="gupao-study-zookeeper" target="1.8" />
       <module name="gupaostudy" target="1.8" />
+      <module name="interview-difficulties" target="1.8" />
+      <module name="interview-difficulties (1)" target="8" />
+      <module name="self-interview" target="1.8" />
+      <module name="self-study-apollo" target="1.8" />
+      <module name="self-study-google-guava" target="1.8" />
+      <module name="self-study-jdk" target="1.8" />
+      <module name="self-study-jvm" target="1.8" />
+      <module name="self-study-network-program" target="1.8" />
       <module name="self-study-networkprogram" target="1.8" />
-      <module name="selfs-study-shardingsphere" target="1.8" />
-      <module name="selfs-study-xml-parser" target="1.8" />
-      <module name="selfs-tudy-network-program" target="1.8" />
+      <module name="self-study-quartz" target="1.8" />
+      <module name="self-study-rocketmq" target="1.8" />
+      <module name="self-study-saga" target="1.8" />
+      <module name="self-study-seata" target="1.8" />
+      <module name="self-study-sharding-sphere" target="1.8" />
+      <module name="self-study-tcc-transcation" target="1.8" />
+      <module name="self-study-util" target="1.8" />
+      <module name="self-study-xml-parser" target="1.8" />
+      <module name="sharding-jdbc-slicing" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

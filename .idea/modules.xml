@@ -2,25 +2,44 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-api/dubbo-service-api.iml" filepath="$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-api/dubbo-service-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-consumer/dubbo-service-consumer.iml" filepath="$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-consumer/dubbo-service-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-impl/dubbo-service-impl.iml" filepath="$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-impl/dubbo-service-impl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-provider/dubbo-service-provider.iml" filepath="$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-provider/dubbo-service-provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-provider-second/dubbo-service-provider-second.iml" filepath="$PROJECT_DIR$/gupao-study-dubbo/dubbo-service-provider-second/dubbo-service-provider-second.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gupao-study-dubbo/dubbo-spi/dubbo-spi.iml" filepath="$PROJECT_DIR$/gupao-study-dubbo/dubbo-spi/dubbo-spi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gupao-study-dubbo/dubbo-springboot-provider/dubbo-springboot-provider.iml" filepath="$PROJECT_DIR$/gupao-study-dubbo/dubbo-springboot-provider/dubbo-springboot-provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gupao-study.iml" filepath="$PROJECT_DIR$/gupao-study.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-activemq/gupao-study-activemq.iml" filepath="$PROJECT_DIR$/gupao-study-activemq/gupao-study-activemq.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-design-mode/gupao-study-design-mode.iml" filepath="$PROJECT_DIR$/gupao-study-design-mode/gupao-study-design-mode.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-dubbo/gupao-study-dubbo.iml" filepath="$PROJECT_DIR$/gupao-study-dubbo/gupao-study-dubbo.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-elasticsearch/gupao-study-elasticsearch.iml" filepath="$PROJECT_DIR$/gupao-study-elasticsearch/gupao-study-elasticsearch.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gupao-study-jdk/gupao-study-jdk.iml" filepath="$PROJECT_DIR$/gupao-study-jdk/gupao-study-jdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-kafka/gupao-study-kafka.iml" filepath="$PROJECT_DIR$/gupao-study-kafka/gupao-study-kafka.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-mongodb/gupao-study-mongodb.iml" filepath="$PROJECT_DIR$/gupao-study-mongodb/gupao-study-mongodb.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-mybatis/gupao-study-mybatis.iml" filepath="$PROJECT_DIR$/gupao-study-mybatis/gupao-study-mybatis.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-mycat/gupao-study-mycat.iml" filepath="$PROJECT_DIR$/gupao-study-mycat/gupao-study-mycat.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-netty/gupao-study-netty.iml" filepath="$PROJECT_DIR$/gupao-study-netty/gupao-study-netty.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-rabbitmq/gupao-study-rabbitmq.iml" filepath="$PROJECT_DIR$/gupao-study-rabbitmq/gupao-study-rabbitmq.iml" />
-      <module fileurl="file://$PROJECT_DIR$/selfs-study-shardingsphere/gupao-study-sharding-sphere.iml" filepath="$PROJECT_DIR$/selfs-study-shardingsphere/gupao-study-sharding-sphere.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gupao-study-redis/gupao-study-redis.iml" filepath="$PROJECT_DIR$/gupao-study-redis/gupao-study-redis.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-springboot/gupao-study-springboot.iml" filepath="$PROJECT_DIR$/gupao-study-springboot/gupao-study-springboot.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-springcloud/gupao-study-springcloud.iml" filepath="$PROJECT_DIR$/gupao-study-springcloud/gupao-study-springcloud.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-springframework/gupao-study-springframework.iml" filepath="$PROJECT_DIR$/gupao-study-springframework/gupao-study-springframework.iml" />
       <module fileurl="file://$PROJECT_DIR$/gupao-study-zookeeper/gupao-study-zookeeper.iml" filepath="$PROJECT_DIR$/gupao-study-zookeeper/gupao-study-zookeeper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gupaostudy.iml" filepath="$PROJECT_DIR$/gupaostudy.iml" />
-      <module fileurl="file://$PROJECT_DIR$/selfs-tudy-network-program/self-study-networkprogram.iml" filepath="$PROJECT_DIR$/selfs-tudy-network-program/self-study-networkprogram.iml" />
-      <module fileurl="file://$PROJECT_DIR$/selfs-study-xml-parser/selfs-study-xml-parser.iml" filepath="$PROJECT_DIR$/selfs-study-xml-parser/selfs-study-xml-parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-interview/interview-difficulties/interview-difficulties.iml" filepath="$PROJECT_DIR$/self-interview/interview-difficulties/interview-difficulties.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-interview/self-interview.iml" filepath="$PROJECT_DIR$/self-interview/self-interview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-apollo/self-study-apollo.iml" filepath="$PROJECT_DIR$/self-study-apollo/self-study-apollo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-google-guava/self-study-google-guava.iml" filepath="$PROJECT_DIR$/self-study-google-guava/self-study-google-guava.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-jdk/self-study-jdk.iml" filepath="$PROJECT_DIR$/self-study-jdk/self-study-jdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-jvm/self-study-jvm.iml" filepath="$PROJECT_DIR$/self-study-jvm/self-study-jvm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-network-program/self-study-networkprogram.iml" filepath="$PROJECT_DIR$/self-study-network-program/self-study-networkprogram.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-quartz/self-study-quartz.iml" filepath="$PROJECT_DIR$/self-study-quartz/self-study-quartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-rocketmq/self-study-rocketmq.iml" filepath="$PROJECT_DIR$/self-study-rocketmq/self-study-rocketmq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-saga/self-study-saga.iml" filepath="$PROJECT_DIR$/self-study-saga/self-study-saga.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-seata/self-study-seata.iml" filepath="$PROJECT_DIR$/self-study-seata/self-study-seata.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-sharding-sphere/self-study-sharding-sphere.iml" filepath="$PROJECT_DIR$/self-study-sharding-sphere/self-study-sharding-sphere.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-tcc-transcation/self-study-tcc-transcation.iml" filepath="$PROJECT_DIR$/self-study-tcc-transcation/self-study-tcc-transcation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-util/self-study-util.iml" filepath="$PROJECT_DIR$/self-study-util/self-study-util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/self-study-xml-parser/self-study-xml-parser.iml" filepath="$PROJECT_DIR$/self-study-xml-parser/self-study-xml-parser.iml" />
     </modules>
   </component>
 </project>

@@ -17,7 +17,7 @@
         <module>gupao-study-kafka</module>
         <module>gupao-study-springboot</module>
         <module>gupao-study-springframework</module>
-        <module>self-study-network-program</module>
+        <module>self-study-networkprogram</module>
         <module>gupao-study-springcloud</module>
         <module>gupao-study-mongodb</module>
         <module>gupao-study-mybatis</module>
@@ -63,6 +63,7 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+                <version>3.10.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -72,6 +73,7 @@
                         <addMavenDescriptor>false</addMavenDescriptor>
                     </archive>
                 </configuration>
+                <version>3.1.2</version>
             </plugin>
         </plugins>
     </build>

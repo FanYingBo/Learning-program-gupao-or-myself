@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.tomcat:tomcat-annotations-api:8.5.55">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../Development/Tools/apache-maven-3.8.5/repository/org/apache/tomcat/tomcat-annotations-api/8.5.55/tomcat-annotations-api-8.5.55.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../../Development/Tools/apache-maven-3.8.5/repository/org/apache/tomcat/tomcat-annotations-api/8.5.55/tomcat-annotations-api-8.5.55-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../Development/Tools/apache-maven-3.8.5/repository/org/apache/tomcat/tomcat-annotations-api/8.5.55/tomcat-annotations-api-8.5.55-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

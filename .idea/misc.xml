@@ -7,29 +7,23 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-springboot/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-activemq/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-netty/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-springcloud/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-springframework/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-rabbitmq/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-zookeeper/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-design-mode/pom.xml" />
         <option value="$PROJECT_DIR$/gupao-study-dubbo/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-elasticsearch/pom.xml" />
         <option value="$PROJECT_DIR$/gupao-study-jdk/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-kafka/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-mongodb/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-mybatis/pom.xml" />
-        <option value="$PROJECT_DIR$/gupao-study-mycat/pom.xml" />
         <option value="$PROJECT_DIR$/selfs-study-shardingsphere/pom.xml" />
         <option value="$PROJECT_DIR$/selfs-study-xml-parser/pom.xml" />
         <option value="$PROJECT_DIR$/selfs-tudy-network-program/pom.xml" />
+        <option value="$PROJECT_DIR$/gupao-study-mongodb/pom.xml" />
+        <option value="$PROJECT_DIR$/self-study-rocketmq/pom.xml" />
+        <option value="$PROJECT_DIR$/self-study-networkprogram/pom.xml" />
+        <option value="$PROJECT_DIR$/self-interview/interview-difficulties/pom.xml" />
       </list>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
   </component>
   <component name="SuppressABINotification">
     <option name="modulesWithSuppressedNotConfigured">
