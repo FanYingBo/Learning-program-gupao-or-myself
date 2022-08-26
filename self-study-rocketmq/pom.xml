@@ -10,6 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>self-study-rocketmq</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>rocketmq-producer</module>
+        <module>rocketmq-consumer</module>
+    </modules>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>4.9.4</version>
+        </dependency>
+    </dependencies>
 </project>
