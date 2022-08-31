@@ -14,19 +14,18 @@ public class SoftReferenceDemo {
         System.out.println("总内存："+totalMemory/(1024*1024));
         long maxMemory = Runtime.getRuntime().maxMemory();
         System.out.println("最大内存："+maxMemory/(1024*1024));
-        byte[] cacheByte = new byte[66*1024*1024]; // 第一次分配空间 设置100m堆内存
-        SoftReference softReference = new SoftReference(cacheByte);
-        cacheByte = null;
+        SoftReference softReference = new SoftReference(new byte[66*1024*1024]);
         long freeMemory = Runtime.getRuntime().freeMemory();
         System.out.println("空闲内存："+freeMemory/(1024*1024));
+        System.gc(); // 主动垃圾回收时（内存充足）不会回收
+        System.out.println("第一次回收后："+softReference.get());
         try{
-            byte[] newByte = new byte[100*1024*1024];
+            byte[] newByte = new byte[100*1024*1024]; // 内存不足时，会回收
         }catch (Error e){
             e.printStackTrace();
         }
         freeMemory = Runtime.getRuntime().freeMemory();
         System.out.println("空闲内存："+freeMemory/(1024*1024));
-        System.out.println("第一次回收后："+cacheByte);
-        System.out.println("第一次回收后："+softReference.get());
+        System.out.println("第二次回收后："+softReference.get());
     }
 }
