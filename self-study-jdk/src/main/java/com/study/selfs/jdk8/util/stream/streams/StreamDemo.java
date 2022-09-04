@@ -5,10 +5,12 @@ import com.study.selfs.timercall.ICalled;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -21,10 +23,19 @@ public class StreamDemo {
 
     public List<String> stringList ;
 
+    public String testString = "nice to meet you stream and stream make programmer easy";
+    public List<Integer> fixed = new ArrayList<>();
+    public List<ExampleStatistic> exampleStatistics = new ArrayList<>();
+
+
     @Before
     public void initList(){
         intList = ListUtils.getRanIntList(30000000,1000);
         stringList = ListUtils.getRanStr(1000000,3);
+        fixed = Arrays.asList(new Integer[]{1,2,4,5});
+        exampleStatistics.add(new ExampleStatistic( 1, BigDecimal.valueOf(2), BigDecimal.valueOf(5.88)));
+        exampleStatistics.add(new ExampleStatistic( 1, BigDecimal.valueOf(3), BigDecimal.valueOf(10.88)));
+        exampleStatistics.add(new ExampleStatistic( 1, BigDecimal.valueOf(4), BigDecimal.valueOf(15.88)));
     }
     @Test
     public void parallelStreamSort(){
@@ -32,6 +43,60 @@ public class StreamDemo {
         intList.parallelStream().sorted(Integer::compare).collect(Collectors.toList());
         System.out.println("Collections Sort 耗时："+(System.currentTimeMillis()-start));// 较 变慢5倍
         System.out.println(intList);
+    }
+
+    /**
+     * difference between flatMap and Map
+     */
+    @Test
+    public void flatMapOrMap(){
+        List<String> list = new ArrayList<>();
+        list.add(testString);
+        //flatMap方法 返回的是stream
+        list.stream().flatMap(t -> Stream.of(t.split("\\s+")).map(s-> s+"1")).forEach(System.out::println);
+        //Map方法 返回的是object
+        list.stream().map(t -> Stream.of(t.split("\\s+")).map(s ->s+"1")).forEach(stringStream -> System.out.println(Arrays.toString(stringStream.toArray())));
+    }
+
+    @Test
+    public void groupCountAggregationOP(){
+//        IntStream.of(1, 2, 3, 6, 8).boxed().collect(Collectors.toCollection(LinkedList::new));
+        //计数
+        Map<String, Long> longMap = Stream.of(testString.split("\\s+"))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        System.out.println(longMap); //{meet=1, stream=2, and=1, programmer=1, to=1, easy=1, make=1, you=1, nice=1}
+        // 最小值
+        System.out.println(fixed.stream().collect(Collectors.minBy(Integer::compareTo)).get()); // 1
+        // 最大值
+        System.out.println(fixed.stream().collect(Collectors.maxBy(Integer::compareTo)).get()); // 5
+        // 平均值
+        System.out.println(fixed.stream().collect(Collectors.averagingInt(Integer::intValue)).doubleValue()); // 3.0
+        // 统计方式
+        System.out.println(fixed.stream().collect(Collectors.summarizingInt(Integer::intValue)));
+        System.out.println(fixed.stream().collect(Collectors.summarizingInt(Integer::intValue)).getMax()); // 5
+        System.out.println(fixed.stream().collect(Collectors.summarizingInt(Integer::intValue)).getMin()); // 1
+
+
+
+//        Map<BigDecimal, BigDecimal> statisticMap = exampleStatistics.stream()
+//                .collect(Collectors.toMap(ExampleStatistic::getLotNumber, exampleStatistic -> exampleStatistic.getExecuteValue()));
+
+
+    }
+    @Test
+    public void reduceTest(){
+        // 最大值
+        System.out.println(fixed.stream().reduce(Integer::max).get());
+        // 求和
+        System.out.println(fixed.stream().reduce(0, (a,b)->a+b));
+        // 对象
+        System.out.println(exampleStatistics.stream().map(ExampleStatistic::getLotNumber).reduce(BigDecimal::add).get());
+        // 对象
+        System.out.println(sumField(exampleStatistics, ExampleStatistic::getLotNumber));
+    }
+
+    private <T> BigDecimal sumField(List<T> data, Function<T, BigDecimal> function){
+        return data.stream().map(function).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Test
