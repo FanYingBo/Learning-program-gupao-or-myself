@@ -11,7 +11,8 @@ public class HashMapProblemDemo {
 //        System.out.println(hash("dadadwwww"));
 //        endlessLoop();
 //        System.out.println(hashMap.get(1));
-        treeMapTest();
+//        treeMapTest();
+        System.out.println(get());
     }
 
 
@@ -41,6 +42,18 @@ public class HashMapProblemDemo {
         return h;
     }
 
+
+    static int get(){
+        int i = 0;
+        try{
+            i = 1;
+            return i;
+        }catch (Exception e){
+            return 2;
+        }finally {
+            return 3;
+        }
+    }
 }
 
 
