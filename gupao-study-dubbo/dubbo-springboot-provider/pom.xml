@@ -12,7 +12,7 @@
     <artifactId>dubbo-springboot-provider</artifactId>
     <properties>
         <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
-        <dubbo.version>2.7.7</dubbo.version>
+        <dubbo.version>2.7.21</dubbo.version>
     </properties>
     <dependencyManagement>
         <dependencies>
